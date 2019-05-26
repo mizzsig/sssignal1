@@ -1,0 +1,29 @@
+/* 最初の英字など */
+.ind{
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+}
+
+/* それぞれのアーティスト */
+.artist{
+	text-align: center;
+}
+
+/* アルバム名 */
+.album{
+	font-size: 20px;
+	font-weight: bold;
+	text-align: left;
+}
+
+/* 収録曲 */
+.musics{
+	text-align: left;
+	padding-left: 50px;
+}
+
+/* レビュー */
+.review{
+	text-align: left;
+}

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>【C#,VB】フリーハンドで太い滑らかな線の描画 | 水飴信号 -Starch Syrup Signal-</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../columnstyle.css">
+    <script src="shCore.js"></script>
+    <script async src="shBrushCSharp.js"></script>
+    <script async src="shBrushVb.js"></script>
+    <link type="text/css" rel="stylesheet" href="shCoreDefault.css">
+    <script>SyntaxHighlighter.all();</script>
+    
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79013420-1', 'auto');
+  ga('send', 'pageview');
+</script>
+    <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="http://sssignal.web.fc2.com/jquery-animate-css-rotate-scale.js"></script>
+<script src="http://sssignal.web.fc2.com/snss.js"></script>
+<link rel="stylesheet" href="http://sssignal.web.fc2.com/snss_style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+
+  	<div id="wrapper">
+  	  <img width="100%" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/header.png">
+
+      <ul class="ulbtn">
+        <a class="btn" href="http://sssignal.web.fc2.com/">Top</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/about.html">About</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/gamesoft.html">Game & Soft</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/review.html">CD Review</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/column.html" style="background:#F0F0FF;">Column</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/link.html">Link</a>
+      </ul>
+
+	<div class="place"><a href="../column.html">Column</a> > 【C#,VB】フリーハンドで太い滑らかな線の描画</div>
+		
+	<div id="main-left">
+		<div class="boxhead">2016/5/10 【C#,VB】フリーハンドで太い滑らかな線の描画</div>
+		<div class="box">
+			<div class="columnspring">
+				<br>
+				よくあるペイントソフトみたいな感じで、マウスで線を引けるようなものが作りたいなあと思って作っていたのですが、そのプログラムを実行してみるとなんだか汚い感じになってしまいました。<br>
+				<br>
+				そのプログラムはこんな感じです。<br>
+				<pre class="brush:csharp" title="c#">
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace testCSharp
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        bool mouseDrug = false;
+        int prevX;
+        int prevY;
+
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseDrug = true;
+            prevX = e.Location.X;
+            prevY = e.Location.Y;
+        }
+
+        private void Form1_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouseDrug = false;
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDrug)
+            {
+                Pen objPen = new Pen(System.Drawing.Color.Black, 10);
+                Graphics objGrp = this.CreateGraphics();
+                objGrp.DrawLine(objPen, prevX, prevY, e.Location.X, e.Location.Y);
+                prevX = e.Location.X;
+                prevY = e.Location.Y;
+
+                objPen.Dispose();
+                objGrp.Dispose();
+            }
+        }
+    }
+}
+				</pre>
+				<br>
+				<pre class="brush:vb" title="Visual Basic">
+Public Class Form1
+
+    Private mouseDrug As Boolean = False
+    Private prevX As Integer
+    Private prevY As Integer
+
+    Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles MyBase.MouseDown
+        mouseDrug = True
+        prevX = e.Location.X
+        prevY = e.Location.Y
+    End Sub
+
+    Private Sub Form1_MouseUp(sender As Object, e As MouseEventArgs) Handles MyBase.MouseUp
+        mouseDrug = False
+    End Sub
+
+    Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles MyBase.MouseMove
+        If mouseDrug Then
+            Dim objPen As New Pen(Color.White, 10)
+            Dim objGrp As Graphics = Me.CreateGraphics()
+            objGrp.DrawLine(objPen, prevX, prevY, e.Location.X, e.Location.Y)
+            prevX = e.Location.X
+            prevY = e.Location.Y
+
+            objPen.Dispose()
+            objGrp.Dispose()
+        End If
+    End Sub
+    
+End Class
+				</pre>
+				<br>
+				フォーム上でマウスがクリックされてから、マウスが移動するたびに線を引きつつ前の座標を記録させるというやり方でフリーハンドでの描画が出来るようにしています。<br>
+				<br>
+				そうして出来たプログラムを動かした結果が下のような動画なのですが、見て分かるように汚い線になってしまいました。<br>
+				<br>
+				<video controls none><source class="img100" src="line1.mp4"></video>
+				<br>
+				<br>
+				本当は滑らかな線を引きたかったんですが、線に切り込みが入ったようになって見栄えが悪くなってしまいました。<br>
+				<br>
+				特にカーブをする時に切り込みが入っているように見えます。<br>
+				<br>
+				線を引いているのでアンチエイリアスをかければ綺麗になるかな？と思ってやってみたんですが、アンチエイリアスは一本の線や図形を描画する際にそのエッジ部分を滑らかにするというものなので、マウスを移動させるたびに何本もの線を引いていく今回のプログラムには特に効果がありませんでした。<br>
+				<br>
+				この現象が起こる原因は、フリーハンドで太い直線を引いていく場合は下の図のような感じで<br><font color="#FF3030">線と線の間に隙間が出来る</font>からです。<br>
+				<br>
+				<img class="img100" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/line1.png" width="500">
+				<br>
+				<br>
+				そのため、下の図の緑色の部分のように<font color="#FF3030">線と線の間を補間</font>してあげる必要があります。<br>
+				<br>
+				<img class="img100" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/line2.png" width="500">
+				<br>
+				<br>
+				今回作るプログラムではマウスの<font color="#FF3030">前の座標を中心</font>として、<font color="#FF3030">引いている線の太さ<br>(objPen.width)の直径</font>を持つ円を描画することで補完することにしました。<br>
+				<br>
+				<br>
+				そうして直したプログラムが下のような感じです。<br>
+				<br>
+				上に挙げたプログラムと比べて<br>
+				c#の場合は43行目、VisualBasicの場合は22行目の一文だけを追加しました。<br>
+				<pre class="brush:csharp" title="c#">
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace testCSharp
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        bool mouseDrug = false;
+        int prevX;
+        int prevY;
+
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+            mouseDrug = true;
+            prevX = e.Location.X;
+            prevY = e.Location.Y;
+        }
+
+        private void Form1_MouseUp(object sender, MouseEventArgs e)
+        {
+            mouseDrug = false;
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDrug)
+            {
+                Pen objPen = new Pen(System.Drawing.Color.Black, 10);
+                Graphics objGrp = this.CreateGraphics();
+                objGrp.DrawLine(objPen, prevX, prevY, e.Location.X, e.Location.Y);
+                objGrp.FillEllipse(Brushes.Black, prevX - objPen.Width / 2, prevY - objPen.Width / 2, objPen.Width, objPen.Width);
+                prevX = e.Location.X;
+                prevY = e.Location.Y;
+
+                objPen.Dispose();
+                objGrp.Dispose();
+            }
+        }
+    }
+}
+				</pre>
+				<br>
+				<pre class="brush:vb" title="Visual Basic">
+Public Class Form1
+
+    Private mouseDrug As Boolean = False
+    Private prevX As Integer
+    Private prevY As Integer
+
+    Private Sub Form1_MouseDown(sender As Object, e As MouseEventArgs) Handles MyBase.MouseDown
+        mouseDrug = True
+        prevX = e.Location.X
+        prevY = e.Location.Y
+    End Sub
+
+    Private Sub Form1_MouseUp(sender As Object, e As MouseEventArgs) Handles MyBase.MouseUp
+        mouseDrug = False
+    End Sub
+
+    Private Sub Form1_MouseMove(sender As Object, e As MouseEventArgs) Handles MyBase.MouseMove
+        If mouseDrug Then
+            Dim objPen As New Pen(Color.White, 10)
+            Dim objGrp As Graphics = Me.CreateGraphics()
+            objGrp.DrawLine(objPen, prevX, prevY, e.Location.X, e.Location.Y)
+            objGrp.FillEllipse(Brushes.White, prevX - objPen.Width / 2, prevY - objPen.Width / 2, objPen.Width, objPen.Width)
+            prevX = e.Location.X
+            prevY = e.Location.Y
+
+            objPen.Dispose()
+            objGrp.Dispose()
+        End If
+    End Sub
+    
+End Class
+				</pre>
+				<br>
+				プログラムの実行結果は下の動画のような感じです。<br>
+				<br>
+				直す前と比べると、かなり自然な感じの線が引けるようになったかなと思います。<br>
+				<br>
+				<video controls none><source class="img100" src="line2.mp4"></video>
+				<br>
+				<br>
+				<hr>
+				<br>
+				こんな感じで今回のプログラムは完成しましたが、<a href="http://blog.hiros-dot.net/?page_id=3771">http://blog.hiros-dot.net/?page_id=3771</a><br>
+				こんなサイトを見つけました。<br>
+				<br>
+				DefaultDrawingAttributesというのはよく分からないのですが、<br>
+				もっと綺麗な線を描く方法もあるのかもしれませんね。<br>
+                <br>
+                <br>
+                <br>
+                <div class="titleFont">2017/6/28 追記</div>
+                <br>
+                よりペイントソフトっぽくするために<a href="./column25.html">「進む」「戻る」機能をつけてみました</a>。
+			</div>
+		</div>
+	<div class="sns_manager">
+      <ul class="circle_group">
+      <span id="sns_com">Please<br>Share!</span>
+    <li id="sns_feedly"><span id="icon-feedly"></span><script>document.write("<a id=\"Afeedly\" href=\"http://cloud.feedly.com/#subscription%2Ffeed%2Fhttp%3A%2F%2Fsssignal.web.fc2.com%2Findex.html\" onclick=\"window.open(this.href, 'Fewindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-feedly">feedly</span></li>
+    <li id="sns_facebook"><span id="icon-facebook"></span><script>document.write("<a id=\"Afacebook\" href=\"http://www.facebook.com/share.php?u="+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-facebook">facebook</span></li>
+    <li id="sns_twitter"><span id="icon-twitter"></span><script>document.write("<a id=\"Atwitter\" href=\"https://twitter.com/intent/tweet?text="+encodeURIComponent(document.title)+"&url="+window.location.href+"&via=mizzsig\"></a>");</script><span id="c-twitter">twitter</span></li>
+    <li id="sns_hatebu"><span id="icon-hatebu"></span><script>document.write("<a id=\"Ahatebu\" href=\"http://b.hatena.ne.jp/entry/"+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-hatebu">hatena bookmark</span></li>
+    <li id="sns_pocket"><span id="icon-pocket"></span><script>document.write("<a id=\"Apocket\" href=\"http://getpocket.com/edit?url="+window.location.href+"&title="+encodeURIComponent(document.title)+"\" onclick=\"window.open(this.href, 'Pwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-pocket">pocket</span></li>
+    <li id="sns_googleplus"><span id="icon-google-plus"></span><script>document.write("<a id=\"Agoogleplus\" href=\"https://plus.google.com/share?url="+window.location.href+"\" onclick=\"window.open(this.href, 'Gwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-gplus">Google plus</span></li>
+</ul>
+    </div>
+	</div>
+
+	<div id="twitter">
+	<a class="twitter-timeline" href="https://twitter.com/mizzsig" data-widget-id="711181564529352705">@mizzsigさんのツイート</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+      <br>
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- fc2HomePageAd -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7441289104125575"
+     data-ad-slot="9712419646"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      <br>
+ <a href="https://twitter.com/intent/follow?ref_src=twsrc%5Etfw&screen_name=mizzsig&tw_p=followbutton" data-show-count="false">
+ <img id="twitter-follow-button" src="../tButton_off.png"></a>
+	</div>
+
+  	</div>
+
+ <script async type="text/javascript" src="../followButton.js"></script>
+
+  </body>
+</html>

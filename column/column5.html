@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>【OpenCVSharp,c#】AndroidをWebカメラ代わりにして画像処理 | 水飴信号 -Starch Syrup Signal-</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../columnstyle.css">
+    <script src="shCore.js"></script>
+    <script async src="shBrushCSharp.js"></script>
+    <link type="text/css" rel="stylesheet" href="shCoreDefault.css">
+    <script>SyntaxHighlighter.all();</script>
+
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79013420-1', 'auto');
+  ga('send', 'pageview');
+</script>
+    <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="http://sssignal.web.fc2.com/jquery-animate-css-rotate-scale.js"></script>
+<script src="http://sssignal.web.fc2.com/snss.js"></script>
+<link rel="stylesheet" href="http://sssignal.web.fc2.com/snss_style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+
+  	<div id="wrapper">
+  	  <img width="100%" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/header.png">
+
+      <ul class="ulbtn">
+        <a class="btn" href="http://sssignal.web.fc2.com/">Top</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/about.html">About</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/gamesoft.html">Game & Soft</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/review.html">CD Review</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/column.html" style="background:#F0F0FF;">Column</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/link.html">Link</a>
+      </ul>
+
+	<div class="place"><a href="../column.html">Column</a> > 【OpenCVSharp,c#】AndroidをWebカメラ代わりにして画像処理</div>
+		
+	<div id="main-left">
+		<div class="boxhead">2016/5/14 【OpenCVSharp,c#】AndroidをWebカメラ代わりにして画像処理</div>
+		<div class="box">
+			<div class="columnspring">
+				<br>
+				画像処理をしたいときによく使われるライブラリとして<a href="https://ja.wikipedia.org/wiki/OpenCV">OpenCV</a>というものがあるのですが、<br>
+				それをc#で使えるような形にした<font color="#FF3030">OpenCVSharp</font>というものがあるそうです。<br>
+				<br>
+				そのOpenCVSharpとWebカメラを使って何か画像処理をしたいなぁと思ったものの、<br>
+				Webカメラは持ってないのでどうしようかなという感じだったのですが、<br>
+				<font color="#FF3030">DroidCam</font>というAndroidをWebカメラの代わりとして使うことが出来るソフトを見つけました。<br>
+				<br>
+				ですので、今回はこの２つを使って簡単な画像処理をやってみました。<br>
+				<br>
+				<iframe class="img100" width="560" height="315" src="https://www.youtube.com/embed/eSZ83199adM" frameborder="0" allowfullscreen></iframe><br>
+				<br>
+				使っているPCのスペックの問題でガタガタな動画になってしまっていますが、<br>
+				Androidで撮っている映像をリアルタイムでPCに送り、エッジ検出などをさせています。<br>
+				<br>
+				作り方を以下に書いていきます。<br>
+				開発環境は、<b>windows7</b>と<b>Visual Studio Express 2013</b>です！<br>
+				<br>
+				<hr>
+				<br>
+				<font size="18px" color="AA3030">下準備</font><br>
+					<br>
+					<dt>１、OpenCVSharpのインストール</dt>
+					<br>
+					<dd>まず始めに、OpenCVSharpをインストールしていきます。<br>
+					<a href="http://schima.hatenablog.com/entry/2013/12/15/110513">OpenCVSharpを開発した方のブログ</a>を参考にして入れました。</dd>
+					<br>
+					<br>
+					<dt>２、DroidCamのインストール</dt>
+					<br>
+					<dd>次に、DroidCamをインストールします。<br>
+					DroidCamはパソコンとスマホの両方にインストールする必要があるのですが、<br>
+					パソコンの方は<a href="https://www.dev47apps.com/droidcam/windows/">公式サイト</a>から入手できます。<br>
+					<br>
+					今のところは<b>Client v6.0.0</b>と<b>Client v5.0.1</b>の２つのバージョンが出ているみたいです。<br>
+					<a href="http://www.sim-jozu.net/archives/1809">こちらのサイトの環境</a>では v5.0.1 しか動かなかったようですが、<br>
+					自分の環境では逆に v6.0.0 だけが動きました。この辺りは各自で確かめてみて下さい。<br>
+					<br>
+					スマホの方は<a href="https://play.google.com/store/search?q=droidcam&c=apps&hl=ja">Google Playで探したら出てきました。</a><br>
+					無料版と有料版(500円)があるみたいなので、無料版の方を入れてみました。</dd>
+					<br>
+					<br>
+					<dt>３、DroidCamの動作確認</dt>
+					<br>
+					<dd>パソコンとスマホの両方にインストールが終わったところでちゃんと動くのかを見てみます。<br>
+					Wi-Fiで繋いでもUSBケーブルで繋いでも良いみたいなので、今回はWi-Fiで繋いでみます。<br>
+					<br>
+					スマホをWi-Fiに繋いだ状態でDroidCamを開いて、<br>
+					下のように繋がっているWi-Fiの情報が出てきたらスマホ側の準備は終了です。<br>
+					<br>
+					<img class="img100" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/droidcam1.png" width="200" /><br>
+					<br>
+					次にパソコン側でDroidCamを起動して、下のような画面が出てくるので<br>
+					スマホの画面に出ていたWi-FiのIPを入力してstartボタンを押せば<br>
+					カメラで読み取った映像が出てきます。<br>
+					<br>
+					<img class="img50" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/droidcam2.png" width="300" /><img class="img50" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/droidcam3.png" width="300" /><br></dd>
+					<br>
+					下準備はこれで完了です！<br>
+          <br>
+          <br>
+          <div class="block">
+            <dt><div class="titleFont">2016/12/26 追記</div></dt><hr><br>
+            <dd>8以降のwindowsに新しく備わった「高速スタートアップ」という機能が有効だと<br>
+            Webカメラが使えなくなることがあるようです。<br>
+            思わぬところに落とし穴が……^^;<br>
+            <br>
+            参考URL:<a href="https://answers.microsoft.com/ja-jp/windows/forum/windows_10-hardware/windows-10-%E3%81%A7-web/a6357cee-7bf7-447b-a7f5-00a984837d94">https://answers.microsoft.com/ja-jp/windows/forum/windows_10-hardware/windows-10-%E3%81%A7-web/a6357cee-7bf7-447b-a7f5-00a984837d94</a><br></dd>
+          </div>
+					<br>
+					<hr>
+					<br>
+					<font size="18px" color="AA3030">プログラム</font><br>
+					<br>
+					ここからはプログラムを組んでいきます。<br>
+					<br>
+					フォームの見た目は下のような感じで、<br>
+					送られた映像をそのまま映すモード、ラプラシアンフィルタによるエッジ検出モード、<br>
+					ネガポジ変換モードの３つを用意して、ボタンで自由に切り替えられるようにしてみます。<br>
+					<br>
+					<img class="img100" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/droidcam4.png" width="400" /><br>
+					<br>
+					LabelとButtonは元からあるコントロールですが、PictureBoxIplというのは<br>
+					OpenCVSharpで扱うIplImageという画像の型をPictureBoxでも扱えるようにしたコントロールです。<br>
+					<a href="http://schima.hatenablog.com/entry/20090903/1251978952">開発者の方のブログ</a>を参考に導入しました。<br>
+					<br>
+					そうして出来たプログラムが下のような感じです。<br>
+					<br>
+				<pre class="brush:csharp" title="c#">
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+using OpenCvSharp;
+
+namespace testCSharp
+{
+    public partial class Form1 : Form
+    {
+        BackgroundWorker worker;
+
+        public Form1()
+        {
+            InitializeComponent();
+
+            worker = new BackgroundWorker();
+
+            // 非同期をキャンセルさせる
+            worker.WorkerSupportsCancellation = true;
+
+            // ProgressChangedイベントを発生させるようにする
+            worker.WorkerReportsProgress = true;
+
+            // ReportProgressメソッドで呼ばれるProgressChangedのイベントハンドラを追加
+            worker.ProgressChanged += new ProgressChangedEventHandler(worker_ProgressChanged);
+
+            // RunWorkerAsyncメソッドで呼ばれるDoWorkに、
+            // 別スレッドでUSBカメラの画像を取得し続けるイベントハンドラを追加
+            worker.DoWork += new DoWorkEventHandler(worker_DoWork);
+        }
+
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+        	// カメラからの映像を受け取る
+            using (var capture = Cv.CreateCameraCapture(CaptureDevice.Any))
+            {
+                IplImage frame;
+                while (true)
+                {
+                    frame = Cv.QueryFrame(capture);
+
+                    // 新しい画像を取得したので、
+                    // ReportProgressメソッドを使って、ProgressChangedイベントを発生させる
+                    worker.ReportProgress(0, frame);
+                }
+            }
+        }
+
+        private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            //  frameがe.UserStateプロパティにセットされて渡されてくる
+            IplImage image = (IplImage)e.UserState;
+
+            CvSize size = new CvSize(320, 240);
+            IplImage reImage = new IplImage(size, image.Depth, image.NChannels);
+
+            Cv.Resize(image, reImage, Interpolation.NearestNeighbor);
+
+            switch (label1.Text)
+            {
+                case "negaposi":
+                    Cv.Not(reImage, reImage);
+                    break;
+                case "laplace":
+                    Cv.Laplace(reImage, reImage);
+                    break;
+            }
+
+            pictureBoxIpl1.ImageIpl = reImage;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // DoWorkイベントハンドラの実行を開始
+            worker.RunWorkerAsync();
+        }
+
+        private void defaultButton_Click(object sender, EventArgs e)
+        {
+            label1.Text = "default";
+        }
+
+        private void laplaceButton_Click(object sender, EventArgs e)
+        {
+            label1.Text = "laplace";
+        }
+
+        private void negaposiButton_Click(object sender, EventArgs e)
+        {
+            label1.Text = "negaposi";
+        }
+    }
+}
+
+				</pre><br>
+				<br>
+				３つのどれかのボタンが押されるとlabel1のtextの値が変化し、<br>
+				その値によって画面の処理を変えるというものです。<br>
+				<br>
+				BackGroundWorkerというクラスは今回始めて使ってみたのですが、<br>
+				このクラスを使用することで、フォームのボタンの操作と映像を受け取る処理を<br>
+				別スレッドで行っているようです。<br>
+				<a href="http://thinkami.hatenablog.com/entry/2014/08/01/074831">こちら</a>と<a href="http://yas-hummingbird.blogspot.jp/2008/12/backgroundworker.html">こちら</a>のブログが参考になりました。<br>
+				<br>
+        <hr>
+        <br>
+        <div class="block">
+          <dt><div class="titleFont">2016/12/26 追記</div></dt><hr><br>
+          <dd>Webカメラで撮った映像を保存したい場合はどうするのか？<br>
+          という質問を頂いたので、新たにページを作りました。<br>
+          <a href="http://sssignal.web.fc2.com/column/column21.html">http://sssignal.web.fc2.com/column/column21.html</a><br>
+          <br>
+          この記事の手順通りにOpenCVSharpをインストールされているなら<br>
+          ３行程書くだけで実装できるので、合わせて参考にして頂ければと思います。<br></dd>
+        </div>
+        <br>
+        <div class="block">
+          <dt><div class="titleFont">2017/1/4 追記</div></dt><hr><br>
+          <dd>Youtubeの動画の位置を変更しました。<br></dd>
+        </div>
+			</div>
+		</div>
+	<div class="sns_manager">
+      <ul class="circle_group">
+      <span id="sns_com">Please<br>Share!</span>
+    <li id="sns_feedly"><span id="icon-feedly"></span><script>document.write("<a id=\"Afeedly\" href=\"http://cloud.feedly.com/#subscription%2Ffeed%2Fhttp%3A%2F%2Fsssignal.web.fc2.com%2Findex.html\" onclick=\"window.open(this.href, 'Fewindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-feedly">feedly</span></li>
+    <li id="sns_facebook"><span id="icon-facebook"></span><script>document.write("<a id=\"Afacebook\" href=\"http://www.facebook.com/share.php?u="+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-facebook">facebook</span></li>
+    <li id="sns_twitter"><span id="icon-twitter"></span><script>document.write("<a id=\"Atwitter\" href=\"https://twitter.com/intent/tweet?text="+encodeURIComponent(document.title)+"&url="+window.location.href+"&via=mizzsig\"></a>");</script><span id="c-twitter">twitter</span></li>
+    <li id="sns_hatebu"><span id="icon-hatebu"></span><script>document.write("<a id=\"Ahatebu\" href=\"http://b.hatena.ne.jp/entry/"+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-hatebu">hatena bookmark</span></li>
+    <li id="sns_pocket"><span id="icon-pocket"></span><script>document.write("<a id=\"Apocket\" href=\"http://getpocket.com/edit?url="+window.location.href+"&title="+encodeURIComponent(document.title)+"\" onclick=\"window.open(this.href, 'Pwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-pocket">pocket</span></li>
+    <li id="sns_googleplus"><span id="icon-google-plus"></span><script>document.write("<a id=\"Agoogleplus\" href=\"https://plus.google.com/share?url="+window.location.href+"\" onclick=\"window.open(this.href, 'Gwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-gplus">Google plus</span></li>
+</ul>
+    </div>
+	</div>
+
+	<div id="twitter">
+	<a class="twitter-timeline" href="https://twitter.com/mizzsig" data-widget-id="711181564529352705">@mizzsigさんのツイート</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+      <br>
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- fc2HomePageAd -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7441289104125575"
+     data-ad-slot="9712419646"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      <br>
+ <a href="https://twitter.com/intent/follow?ref_src=twsrc%5Etfw&screen_name=mizzsig&tw_p=followbutton" data-show-count="false">
+ <img id="twitter-follow-button" src="../tButton_off.png"></a>
+	</div>
+
+  	</div>
+
+ <script async type="text/javascript" src="../followButton.js"></script>
+
+  </body>
+</html>

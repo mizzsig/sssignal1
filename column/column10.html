@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>【C#,VB】trr風の長文タイピングソフトの作成 | 水飴信号 -Starch Syrup Signal-</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../columnstyle.css">
+    <script src="shCore.js"></script>
+    <script async src="shBrushCSharp.js"></script>
+    <script async src="shBrushVb.js"></script>
+    <link type="text/css" rel="stylesheet" href="shCoreDefault.css">
+    <script>SyntaxHighlighter.all();</script>
+    
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79013420-1', 'auto');
+  ga('send', 'pageview');
+</script>
+    <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="http://sssignal.web.fc2.com/jquery-animate-css-rotate-scale.js"></script>
+<script src="http://sssignal.web.fc2.com/snss.js"></script>
+<link rel="stylesheet" href="http://sssignal.web.fc2.com/snss_style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>  	
+
+  	<div id="wrapper">
+  	  <img width="100%" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/header.png">
+
+      <ul class="ulbtn">
+        <a class="btn" href="http://sssignal.web.fc2.com/">Top</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/about.html">About</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/gamesoft.html">Game & Soft</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/review.html">CD Review</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/column.html" style="background:#F0F0FF;">Column</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/link.html">Link</a>
+      </ul>
+
+	<div class="place"><a href="../column.html">Column</a> > 【C#,VB】trr風の長文タイピングソフトの作成</div>
+		
+	<div id="main-left">
+		<div class="boxhead">2016/8/7 【C#,VB】trr風の長文タイピングソフトの作成</div>
+		<div class="box">
+			<div class="columnspring">
+				<br>
+				皆さんは<b>trr</b>というソフトをご存じでしょうか？<br>
+				<br>
+				trrというのはEmacs上で動くタイピングソフトです。<br>
+				特徴としては、単語ではなく文章を打つタイプのソフトだということや、<br>
+				速度やミス率、独自の評価値などを教えてくれるという点が挙げられます。<br>
+				<br>
+				本家trrには及ばずとも、<b>何かそれっぽい</b>タイピングソフトを作ってみたいな！と思ったので<br>
+				作ってみました。<br>
+				<br>
+				<iframe class="img100" width="420" height="315" src="https://www.youtube.com/embed/IJ7Jz7S-eXo" frameborder="0" allowfullscreen></iframe>
+				<br>
+				実際に動かしている様子はこんな感じです。<br>
+				作り方を以下に書いていきます。<br>
+				<br>
+				<br>
+				<hr>
+				<br>
+				<br>
+				<div class="toc">
+					<div class="toctitle">目次</div>
+					<ul>
+						<li><a href="#tag1">1. 仕様決め、コントロールの配置</a></li>
+						<li>
+						<a href="#tag2-1">2. プログラム</a>
+						<ul>
+							<li><a href="#tag2-1">2-1. 初期化処理</a></li>
+							<li><a href="#tag2-2">2-2. ファイル読み込み</a></li>
+							<li><a href="#tag2-3">2-3. スペースと改行の選択</a></li>
+							<li><a href="#tag2-4">2-4. キーが押された時の処理</a></li>
+							<li><a href="#tag2-5">2-5. 得点の計測</a></li>
+							<li><a href="#tag2-6">2-6. ソースコード</a></li>
+						</ul>
+						</li>
+						<li><a href="#tag3">3. あとがき</a></li>
+					</ul>
+				</div>
+				<br>
+				<br>
+				<a name="tag1"></a>
+				<div class="block">
+				<div class="titlefont">1. 仕様決め、コントロールの配置</div>
+				<hr>
+				<br>
+				上の動画を見てもらえばわかりますが、<br>
+				今回作ったプログラムは、本家trrにある<br>
+				難易度選択、テキスト選択、ハイスコアの記録などの機能は<b>一切省いて</b><br>
+				タイピングに最低限必要な機能だけをそろえた感じになっています。<br>
+				<br>
+				ですが、本家に唯一勝っている(?)部分として<br>
+				スコアやミス率などがリアルタイムで表示されています。<br>
+				<br>
+				また、表示する文章はtxtファイルを読み込んで表示しているのですが、<br>
+				改行の場所は指定せず、自動で改行を行うようにしています。<br>
+				<br>
+				<br>
+				<br>
+				コントロールの配置は下のようになっています。<br>
+				<br>
+				<div align="center">
+					<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/trrLike1.png" width="500">
+				</div>
+				<br>
+				リアルタイムでスコアなどを出すためにtimerを１つ置いていて、<br>
+				それ以外のコントロールは全てlabelです。<br>
+				<br>
+				guideText, typingPoint, missPointはそれぞれ<br>
+				打ち込む文章、自分が打った文章、自分が間違えた場所を表示します。<br>
+				noticeは得点やミス率などを表示します。<br>
+				showMenuは<b>ただの飾り</b>です。<br>
+				Textに空白をたくさん入れることで画面いっぱいに枠を広げています。<br>
+				<br>
+				一番重要なこととして、各コントロールのフォントは<br>
+				デフォルトではMS UI Gothicが設定されていますが、<br>
+				このフォントだと文字ごとに大きさが違っているので<br>
+				<b>MS ゴシック</b>に変更しておきます。<br>
+				<!-- font=14px form1.size(800, 600) guideText.location(21, 18) showMenu.location(-18, 350) notice.location(30, 388) timer1.interval=100 -->
+				<div align="center">
+					<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/trrLike2.png">
+				</div>
+				<br>
+				こうすることで、どの文字も同じ大きさを使用するようになるので<br>
+				見た目が綺麗になります。<br>
+				</div>
+				<br>
+				<br>
+				<a name="tag2-1"></a>
+				<div class="block">
+				<div class="titlefont">2. プログラム</div>
+				<div class="titlefont">2-1. 初期化処理</div>
+				<hr>
+				<br>
+				まずは初期化処理のプログラムを組みます。<br>
+				<br>
+				<br>
+				<div>
+					<div id="button2-1cs1" style="display:inline">
+						<input type="button" value="c# 初期化処理プログラム 展開"
+						onClick="document.getElementById('button2-1cs2').style.display='inline';
+								 document.getElementById('button2-1cs1').style.display='none'">
+					</div>
+					<div id="button2-1cs2" style="display:none">
+						<input type="button" value="c# 初期化処理プログラム 閉じる"
+						onClick="document.getElementById('button2-1cs1').style.display='inline';
+								 document.getElementById('button2-1cs2').style.display='none'">
+					<pre class="brush:csharp" title="c# 初期化処理プログラム">
+private void Form1_Load(object sender, EventArgs e)
+{
+	typingPoint.Parent = guideText;
+	typingPoint.BackColor = Color.Transparent;
+	typingPoint.Location = new Point(0, 0);
+	missPoint.Parent = typingPoint;
+	missPoint.BackColor = Color.Transparent;
+	missPoint.Location = new Point(0, 0);
+
+	readFile();
+}</pre>
+					</div>
+				</div>
+				<br>
+				<div>
+					<div id="button2-1vb1" style="display:inline">
+						<input type="button" value="VB 初期化処理プログラム 展開"
+						onClick="document.getElementById('button2-1vb2').style.display='inline';
+								 document.getElementById('button2-1vb1').style.display='none'">
+					</div>
+					<div id="button2-1vb2" style="display:none">
+						<input type="button" value="VB 初期化処理プログラム 閉じる"
+						onClick="document.getElementById('button2-1vb1').style.display='inline';
+								 document.getElementById('button2-1vb2').style.display='none'">
+					<pre class="brush:vb" title="VB 初期化処理プログラム">
+Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+	typingPoint.Parent = guideText
+	typingPoint.BackColor = Color.Transparent
+	typingPoint.Location = New Point(0, 0)
+	missPoint.Parent = typingPoint
+	missPoint.BackColor = Color.Transparent
+	missPoint.Location = New Point(0, 0)
+
+	readFile()
+End Sub</pre>
+					</div>
+				</div>
+				<br>
+				guideText, typingPoint, missPointの３つに親子関係を持たせて位置を揃えます。<br>
+				また、BackColorにTransparentを指定することで親のTextを透けて見えるようにしています。<br>
+				<br>
+				注意点としては、１つの親に２つの子を持たせないようにしなければいけません。<br>
+				１つの親に２つの子を持たせると、<b>子供のTextが他の子の所では透けない</b>からです。<br>
+				今回はguideTextの子がtypingPoint、typingPointの子がmissPointという風にしています。<br>
+				<br>
+				<div align="center">
+					<img class="img50" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/trrLike3.png" height="300">
+					<img class="img50" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/trrLike4.png" width="300">
+				</div>
+				<br>
+				３つのコントロールが同じ位置にいるため、右図のようなやり方だと<br>
+				どちらかの子がもう一つの子に隠れてしまうことになります。<br>
+				そのため、親子関係をしっかりさせて孫を一番前に持ってくることが重要です。<br>
+				<br>
+				readFile()関数は次の章で作ります！<br>
+				</div>
+				<br>
+				<br>
+				<a name="tag2-2"></a>
+				<div class="block">
+				<div class="titlefont">2-2. ファイル読み込み</div>
+				<hr>
+				<br>
+				次はファイルの読み込みを行います。<br>
+				読み込むtxtファイルは下のような形式になっています。<br>
+				<br>
+				<div align="center">
+					<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/trrLike5.png">
+				</div>
+				<br>
+				\から始まっている行がタイトルで、その一行下からタイピングの文章が入っています。<br>
+				タイピングの文章は何行改行しても構わず、改行はスペース１つ分として扱うことにしました。<br>
+				また、ファイルの終端には]を置いてあります。<br>
+				<br>
+				<div>
+					<div id="button2-2cs1" style="display:inline">
+						<input type="button" value="c# ファイル読み込みプログラム 展開"
+						onClick="document.getElementById('button2-2cs2').style.display='inline';
+								 document.getElementById('button2-2cs1').style.display='none'">
+					</div>
+					<div id="button2-2cs2" style="display:none">
+						<input type="button" value="c# ファイル読み込みプログラム 閉じる"
+						onClick="document.getElementById('button2-2cs1').style.display='inline';
+								 document.getElementById('button2-2cs2').style.display='none'">
+					<pre class="brush:csharp" title="c# ファイル読み込みプログラム">
+Random rand = new Random();
+int guideTextPoint = 0;
+string allText;
+bool startedTyping;
+double typingTime;
+double typeCount;
+double missTypeCount;
+bool missFlag;
+
+private void readFile()
+{
+	int textPoint;
+	int colsCount = 0;
+	int rowsCount = 0;
+	int prevSpace = 0;
+	int temp;
+
+	// 各ラベルの初期化
+	guideText.Text = "";
+	missPoint.Text = Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+	typingPoint.Text = Environment.NewLine + Environment.NewLine + Environment.NewLine + "*";
+
+	// ファイル読み込み
+	System.IO.StreamReader reader = new System.IO.StreamReader("1.txt");
+	allText = reader.ReadToEnd();
+	reader.Close();
+
+	// 文章の先頭を探す
+	textPoint = rand.Next(allText.Length - 1);
+	while(allText[textPoint] != '\\'){
+		textPoint = (textPoint + 1) % allText.Length;
+	}
+
+	temp = textPoint;
+	textPoint += 1;
+
+	// タイトルの配置
+	do
+	{
+		guideText.Text += allText[textPoint];
+		textPoint += 1;
+	} while (allText[textPoint] != '\r');
+
+	// どこの文章を打っているかの位置指定(最後の+2で改行文字を飛ばしている)
+	guideTextPoint = textPoint - temp + 2;
+	rowsCount = 1;
+	guideText.Text += Environment.NewLine;
+	textPoint += 1;
+	colsCount = 1;
+
+	// 選んだ曲のテキストの配置
+	while (allText[textPoint] != '\\' && allText[textPoint] != ']' && rowsCount < 6)
+	{
+		switch (allText[textPoint])
+		{
+			case '\r':
+				spaceOrNewline(ref colsCount, ref rowsCount, ref prevSpace, ref textPoint, 1);
+				textPoint += 1;
+				break;
+			case ' ':
+				spaceOrNewline(ref colsCount, ref rowsCount, ref prevSpace, ref textPoint, 0);
+				break;
+			default:
+				guideText.Text += allText[textPoint];
+				break;
+		}
+		colsCount += 1;
+		textPoint += 1;
+	}
+
+	textRow = rowsCount;
+
+	if (rowsCount < 6)
+	{
+		guideText.Text = guideText.Text.Substring(0, guideText.Text.Length - 1) + Environment.NewLine;
+	}
+
+	// 得点やミス率用の変数の初期化
+	typeCount = 0.0;
+	missTypeCount = 0.0;
+	startedTyping = false;
+	typingTime = 0.0;
+	missFlag = true;
+}</pre>
+					</div>
+				</div>
+				<br>
+				<div>
+					<div id="button2-2vb1" style="display:inline">
+						<input type="button" value="VB ファイル読み込みプログラム 展開"
+						onClick="document.getElementById('button2-2vb2').style.display='inline';
+								 document.getElementById('button2-2vb1').style.display='none'">
+					</div>
+					<div id="button2-2vb2" style="display:none">
+							<input type="button" value="VB ファイル読み込みプログラム 閉じる"
+							onClick="document.getElementById('button2-2vb1').style.display='inline';
+									 document.getElementById('button2-2vb2').style.display='none'">
+						<pre class="brush:vb" title="VB ファイル読み込みプログラム">
+Dim rand As New Random
+Dim guideTextPoint As Integer = 0
+Dim allText As String
+Dim startedTyping As Boolean
+Dim typingTime As Double
+Dim typeCount As Double
+Dim missTypeCount As Double
+Dim missFlag As Boolean
+
+Private Sub readFile()
+	Dim textPoint As Integer
+	Dim colsCount As Integer = 0
+	Dim rowCount As Integer = 0
+	Dim prevSpace As Integer = 0
+	Dim temp As Integer
+
+	' 各ラベルの初期化
+	guideText.Text = ""
+	missPoint.Text = Environment.NewLine & Environment.NewLine & Environment.NewLine & Environment.NewLine
+	typingPoint.Text = Environment.NewLine & Environment.NewLine & Environment.NewLine & "*"
+
+	'ファイル読み込み
+	allText = My.Computer.FileSystem.ReadAllText("1.txt")
+
+	' 文章の先頭を探す
+	textPoint = rand.Next(allText.Length - 1)
+	While allText(textPoint) <> "\"
+		textPoint = (textPoint + 1) Mod allText.Length
+	End While
+
+	temp = textPoint
+	textPoint += 1
+
+	' タイトルの配置
+	Do While (allText(textPoint) <> vbCr)
+		guideText.Text &= allText(textPoint)
+		textPoint += 1
+	Loop
+
+	' どこの文章を打っているかの位置指定(最後の+2で改行文字を飛ばしている)
+	guideTextPoint = textPoint - temp + 2
+	rowCount = 1
+	guideText.Text &= Environment.NewLine
+	textPoint += 1
+	colsCount = 1
+
+	' 選んだ曲のテキストの配置
+	While (allText(textPoint) <> "\" And allText(textPoint) <> "]" And rowCount < 6)
+		Select Case allText(textPoint)
+			Case vbCr
+				spaceOrNewline(colsCount, rowCount, prevSpace, textPoint, 1)
+				textPoint += 1
+			Case " "
+				spaceOrNewline(colsCount, rowCount, prevSpace, textPoint, 0)
+			Case Else
+				guideText.Text &= allText(textPoint)
+		End Select
+		colsCount += 1
+		textPoint += 1
+	End While
+
+	textRow = rowCount
+
+	If rowCount < 6 Then
+		guideText.Text = guideText.Text.Substring(0, guideText.Text.Length - 1) & Environment.NewLine
+	End If
+
+	' 得点やミス率用の変数の初期化
+	typeCount = 0.0
+	missTypeCount = 0.0
+	startedTyping = False
+	typingTime = 0.0
+	missFlag = True
+End Sub</pre>
+					</div>
+				</div>
+				<br>
+				プログラムは上のような感じです。<br>
+				txtファイルを読み込んでguideTextにコピーしています。<br>
+				<br>
+				表示させる文章の選び方は、最初にファイルのランダムな位置にアクセスして<br>
+				後ろの方向に一文字ずつ見ていき、<b>\</b>が見つかったらその文章を<br>
+				タイピングに使うことにしています。<br>
+				<br>
+				<div align="center">
+					<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/trrLike6.png">
+				</div>
+				<br>
+				本文にスペースか改行があったときは、spaceOrNewline()関数で<br>
+				タイピング中でスペースと改行のどちらを入れるかを決定しています。<br>
+				<br>
+				タイピングの文章は５行あることを想定していますが、<br>
+				５行に届かない時も対応できるようになっています。<br>
+				<br>
+				windowsで作成したので、改行周りの処理は全てCr+Lfになっている前提で作っています。<br>
+				<br>
+				<div align="center">
+					<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/trrLike7.png">
+				</div>
+				<br>
+				</div>
+				<br>
+				<br>
+				<a name="tag2-3"></a>
+				<div class="block">
+				<div class="titlefont">2-3. スペースと改行の選択</div>
+				<hr>
+				<br>
+				次は、タイピングの文章をコピーするときに空白と改行を適切に入れるための関数を作ります。<br>
+				<br>
+				プログラムは下のような感じです。<br>
+				<br>
+				<div>
+					<div id="button2-3cs1" style="display:inline">
+						<input type="button" value="c# スペースと改行の選択プログラム 展開"
+						onClick="document.getElementById('button2-3cs2').style.display='inline';
+								 document.getElementById('button2-3cs1').style.display='none'">
+					</div>
+					<div id="button2-3cs2" style="display:none">
+						<input type="button" value="c# スペースと改行の選択プログラム 閉じる"
+						onClick="document.getElementById('button2-3cs1').style.display='inline';
+								 document.getElementById('button2-3cs2').style.display='none'">
+					<pre class="brush:csharp" title="c# スペースと改行の選択プログラム">
+private void spaceOrNewline(ref int colsCount, ref int rowsCount, ref int prevSpace, ref int textPoint, int pad)
+{
+	if (colsCount >= 70)
+	{
+		guideText.Text = guideText.Text.Remove(guideText.Text.Length - colsCount + prevSpace, colsCount - prevSpace);
+		guideText.Text += Environment.NewLine + Environment.NewLine + Environment.NewLine;
+		textPoint -= colsCount - prevSpace + pad;
+		rowsCount += 1;
+		colsCount = 0;
+		prevSpace = 0;
+	}
+	else
+	{
+		guideText.Text += " ";
+		prevSpace = colsCount;
+	}
+}</pre>
+					</div>
+				</div>
+				<br>
+				<div>
+					<div id="button2-3vb1" style="display:inline">
+						<input type="button" value="VB スペースと改行の選択プログラム 展開"
+						onClick="document.getElementById('button2-3vb2').style.display='inline';
+								 document.getElementById('button2-3vb1').style.display='none'">
+					</div>
+					<div id="button2-3vb2" style="display:none">
+							<input type="button" value="VB スペースと改行の選択プログラム 閉じる"
+							onClick="document.getElementById('button2-3vb1').style.display='inline';
+									 document.getElementById('button2-3vb2').style.display='none'">
+						<pre class="brush:vb" title="VB スペースと改行の選択プログラム">
+Private Sub spaceOrNewline(ByRef colsCount As Integer, ByRef rowCount As Integer, ByRef prevSpace As Integer, ByRef textPoint As Integer, ByVal pad As Integer)
+	If (colsCount >= 70) Then
+		guideText.Text = guideText.Text.Remove(guideText.Text.Length - colsCount + prevSpace, colsCount - prevSpace)
+		guideText.Text &= Environment.NewLine & Environment.NewLine & Environment.NewLine
+		textPoint -= colsCount - prevSpace + pad
+		rowCount += 1
+		colsCount = 0
+		prevSpace = 0
+	Else
+		guideText.Text &= " "
+		prevSpace = colsCount
+	End If
+End Sub</pre>
+					</div>
+				</div>
+				<br>
+				流れとしては、colsCount変数で今の行に何文字書かれているかを記録して、<br>
+				それが一定値を超えたときは改行を入れて、そうでないときはスペースを入れています。<br>
+				<br>
+				<div align="center">
+					<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/trrLike8.png">
+				</div>
+				<br>
+				</div>
+				<br>
+				<br>
+				<a name="tag2-4"></a>
+				<div class="block">
+                <div class="titlefont">2-4. キーが押された時の処理</div>
+				<hr>
+				<br>
+				ここまでで、プログラムを起動してからタイピングの文章を読み込んで<br>
+				表示するまでが出来たので、次はキーが押された時の処理を作ります。<br>
+				プログラムは下のようになりました。<br>
+				<br>
+				<div>
+					<div id="button2-4cs1" style="display:inline">
+						<input type="button" value="c# キーが押された時の処理プログラム 展開"
+						onClick="document.getElementById('button2-4cs2').style.display='inline';
+								 document.getElementById('button2-4cs1').style.display='none'">
+					</div>
+					<div id="button2-4cs2" style="display:none">
+						<input type="button" value="c# キーが押された時の処理プログラム 閉じる"
+						onClick="document.getElementById('button2-4cs1').style.display='inline';
+								 document.getElementById('button2-4cs2').style.display='none'">
+					<pre class="brush:csharp" title="c# キーが押された時の処理プログラム">
+private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+{
+	if (startedTyping == false)
+	{
+		startedTyping = true;
+		timer1.Start();
+	}
+	//  正しいキーが入力された
+	if (e.KeyChar == guideText.Text[guideTextPoint])
+	{
+		typingPoint.Text = typingPoint.Text.Substring(0, typingPoint.Text.Length - 1);
+		typingPoint.Text += guideText.Text[guideTextPoint];
+
+		if (e.KeyChar == (char)Keys.Enter)
+		{
+			typingPoint.Text += Environment.NewLine + Environment.NewLine;
+			missPoint.Text += Environment.NewLine + Environment.NewLine + Environment.NewLine;
+			guideTextPoint += 5;
+
+			typedRow += 1;
+			// 終了処理
+			if (textRow == typedRow)
+			{
+				textRow = 1;
+				typedRow = 1;
+				timer1.Stop();
+				readFile();
+				return;
+			}
+		}
+		else if (missFlag)
+		{
+			missPoint.Text += " ";
+		}
+
+		typingPoint.Text += "*";
+
+		guideTextPoint += 1;
+		typeCount += 1;
+		missFlag = true;
+	}
+	else
+	{
+		typingPoint.Text = typingPoint.Text.Substring(0, typingPoint.Text.Length - 1);
+		typingPoint.Text += e.KeyChar;
+
+		if (missFlag)
+		{
+			missTypeCount += 1;
+			missFlag = false;
+			missPoint.Text += "^";
+		}
+	}
+}</pre>
+					</div>
+				</div>
+				<br>
+				<div>
+					<div id="button2-4vb1" style="display:inline">
+						<input type="button" value="VB キーが押された時の処理プログラム 展開"
+						onClick="document.getElementById('button2-4vb2').style.display='inline';
+								 document.getElementById('button2-4vb1').style.display='none'">
+					</div>
+					<div id="button2-4vb2" style="display:none">
+							<input type="button" value="VB キーが押された時の処理プログラム 閉じる"
+							onClick="document.getElementById('button2-4vb1').style.display='inline';
+									 document.getElementById('button2-4vb2').style.display='none'">
+						<pre class="brush:vb" title="VB キーが押された時の処理プログラム">
+Private Sub Form1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles MyBase.KeyPress
+	If (startedTyping = False) Then
+		startedTyping = True
+		Timer1.Start()
+	End If
+	' 正しいキーが入力された
+	If (e.KeyChar = guideText.Text(guideTextPoint)) Then
+
+		Mid(typingPoint.Text, typingPoint.Text.Length, 1) = guideText.Text(guideTextPoint)
+
+		If (e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Enter)) Then
+			typingPoint.Text &= Environment.NewLine & Environment.NewLine
+			missPoint.Text &= Environment.NewLine & Environment.NewLine & Environment.NewLine
+			guideTextPoint += 5
+
+			typedRow += 1
+			' 終了処理
+			If (textRow = typedRow) Then
+				textRow = 1
+				typedRow = 1
+				Timer1.Stop()
+				readFile()
+				Return
+			End If
+		ElseIf (missFlag) Then
+			missPoint.Text &= " "
+		End If
+
+		typingPoint.Text &= "*"
+
+		guideTextPoint += 1
+		typeCount += 1
+		missFlag = True
+
+	Else
+		' どういう風に間違えたかを出す
+		Mid(typingPoint.Text, typingPoint.Text.Length, 1) = e.KeyChar
+
+		' ミス率、評価の計算に使用
+		If (missFlag) Then
+			missTypeCount += 1
+			missFlag = False
+			missPoint.Text &= "^"
+		End If
+	End If
+End Sub</pre>
+					</div>
+				</div>
+				<br>
+				キーが押された時のイベントはKeyPressの他にKeyDownやPreviewKeyDownがありますが、<br>
+				KeyDownやPreviewKeyDownは大文字小文字の区別ができなかったり、<br>
+				Shiftキーなどにも反応してしまうのでKeyPressイベントを使いました。<br>
+				<br>
+				初めてキーが押されたとき(startedTypingがfalseのとき)は<br>
+				timer1をスタートさせて得点などの計測を始めます。<br>
+				<br>
+				押されたキーが正しいかどうかの判定は、<br>
+				e.KeyCharとguideTextの文字が同じかどうかで見ています。<br>
+				<br>
+				押されたキーが正しいか違っているかによって、<br>
+				押したキーの回数や間違えた回数などをカウントしていますが、<br>
+				正しくEnterを押した場合は終了の判定も行います。<br>
+				</div>
+				<br>
+				<br>
+				<a name="tag2-5"></a>
+				<div class="block">
+                <div class="titlefont">2-5. 得点の計測</div>
+				<hr>
+				<br>
+				最後にtimer1のtickイベントに得点などを計算して表示するプログラムを作ります。<br>
+				<br>
+				<div>
+					<div id="button2-5cs1" style="display:inline">
+						<input type="button" value="c# 得点の計測プログラム 展開"
+						onClick="document.getElementById('button2-5cs2').style.display='inline';
+								 document.getElementById('button2-5cs1').style.display='none'">
+					</div>
+					<div id="button2-5cs2" style="display:none">
+						<input type="button" value="c# 得点の計測プログラム 閉じる"
+						onClick="document.getElementById('button2-5cs1').style.display='inline';
+								 document.getElementById('button2-5cs2').style.display='none'">
+					<pre class="brush:csharp" title="c# 得点の計測プログラム">
+private void timer1_Tick(object sender, EventArgs e)
+{
+	typingTime += timer1.Interval / 1000.0;
+	notice.Text = "所要時間：　" + Math.Round(typingTime, 1).ToString() + " 秒" + Environment.NewLine;
+	notice.Text += " ミス率 ：　" + Math.Round((missTypeCount / (missTypeCount + typeCount) * 100), 1).ToString() + " ％" + Environment.NewLine;
+	notice.Text += "字数／分：　" + Math.Round((typeCount * 60 / typingTime), 1).ToString() + Environment.NewLine;
+	notice.Text += " 評　価 ：　" + Math.Round(Math.Max(((typeCount - (missTypeCount * 10)) * 60 / typingTime), 0.0), 1).ToString() + " 点";
+}</pre>
+					</div>
+				</div>
+				<br>
+				<div>
+					<div id="button2-5vb1" style="display:inline">
+						<input type="button" value="VB 得点の計測プログラム 展開"
+						onClick="document.getElementById('button2-5vb2').style.display='inline';
+								 document.getElementById('button2-5vb1').style.display='none'">
+					</div>
+					<div id="button2-5vb2" style="display:none">
+							<input type="button" value="VB 得点の計測プログラム 閉じる"
+							onClick="document.getElementById('button2-5vb1').style.display='inline';
+									 document.getElementById('button2-5vb2').style.display='none'">
+						<pre class="brush:vb" title="VB 得点の計測プログラム">
+Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+	typingTime += Timer1.Interval / 1000.0
+	notice.Text = "所要時間：　" + Math.Round(typingTime, 1).ToString() + " 秒" + Environment.NewLine
+	notice.Text &= " ミス率 ：　" + Math.Round((missTypeCount / typeCount * 100), 1).ToString() + " ％" + Environment.NewLine
+	notice.Text &= "字数／分：　" + Math.Round((typeCount * 60 / typingTime), 1).ToString() + Environment.NewLine
+	notice.Text &= " 評　価 ：　" + Math.Round(Math.Max(((typeCount - (missTypeCount * 10)) * 60 / typingTime), 0.0), 1).ToString() + " 点"
+End Sub</pre>
+					</div>
+				</div>
+				<br>
+				timerのIntervalの単位はミリ秒が使われているので、1000で割ることで単位を秒にしています。<br>
+				<br>
+				ミス率と字数／分は単純に計算して出しています。<br>
+				<br>
+				評価の値は、本家trrのデフォルトの評価関数である<br>
+				（打文字数－（誤打数×１０））×６０÷（経過した秒数）<br>
+				という式を用いています。<br>
+				</div>
+				<br>
+				<br>
+				<a name="tag2-6"></a>
+				<div class="block">
+				<div class="titlefont">2-6. ソースコード</div>
+				<hr>
+				<br>
+				上の方で書いてきたプログラムを繋ぎ合わせると、<br>
+				最終的なソースコードは下のようになりました。<br>
+				<br>
+				<div>
+					<div id="button2-6cs1" style="display:inline">
+						<input type="button" value="c# ソースコード全体 展開"
+						onClick="document.getElementById('button2-6cs2').style.display='inline';
+								 document.getElementById('button2-6cs1').style.display='none'">
+					</div>
+					<div id="button2-6cs2" style="display:none">
+						<input type="button" value="c# ソースコード全体 閉じる"
+						onClick="document.getElementById('button2-6cs1').style.display='inline';
+								 document.getElementById('button2-6cs2').style.display='none'">
+					<pre class="brush:csharp" title="c# ソースコード全体">
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace testCSharp
+{
+    public partial class Form1 : Form
+    {
+        Random rand = new Random();
+        int guideTextPoint = 0;
+        string allText;
+        int typedRow = 1;
+        int textRow = 1;
+        bool startedTyping;
+        double typingTime;
+        double typeCount;
+        double missTypeCount;
+        bool missFlag;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            typingPoint.Parent = guideText;
+            typingPoint.BackColor = Color.Transparent;
+            typingPoint.Location = new Point(0, 0);
+            typingPoint.Size = guideText.Size;
+            missPoint.Parent = typingPoint;
+            missPoint.BackColor = Color.Transparent;
+            missPoint.Location = new Point(0, 0);
+            missPoint.Size = guideText.Size;
+
+            readFile();
+        }
+
+        private void spaceOrNewline(ref int colsCount, ref int rowsCount, ref int prevSpace, ref int textPoint, int pad)
+        {
+            if (colsCount >= 70)
+            {
+                guideText.Text = guideText.Text.Remove(guideText.Text.Length - colsCount + prevSpace, colsCount - prevSpace);
+                guideText.Text += Environment.NewLine + Environment.NewLine + Environment.NewLine;
+                textPoint -= colsCount - prevSpace + pad;
+                rowsCount += 1;
+                colsCount = 0;
+                prevSpace = 0;
+            }
+            else
+            {
+                guideText.Text += " ";
+                prevSpace = colsCount;
+            }
+        }
+
+        private void readFile()
+        {
+            int textPoint;
+            int colsCount = 0;
+            int rowsCount = 0;
+            int prevSpace = 0;
+            int temp;
+
+            guideText.Text = "";
+            missPoint.Text = Environment.NewLine + Environment.NewLine + Environment.NewLine + Environment.NewLine;
+            typingPoint.Text = Environment.NewLine + Environment.NewLine + Environment.NewLine + "*";
+
+            // ファイル読み込み
+            System.IO.StreamReader reader = new System.IO.StreamReader("1.txt");
+            allText = reader.ReadToEnd();
+            reader.Close();
+
+            // 文章の先頭を探す
+            textPoint = rand.Next(allText.Length - 1);
+            while(allText[textPoint] != '\\'){
+                textPoint = (textPoint + 1) % allText.Length;
+            }
+
+            temp = textPoint;
+            textPoint += 1;
+
+            // タイトルの配置
+            do
+            {
+                guideText.Text += allText[textPoint];
+                textPoint += 1;
+            } while (allText[textPoint] != '\r');
+
+            guideTextPoint = textPoint - temp + 2;
+            rowsCount = 1;
+            guideText.Text += Environment.NewLine;
+            textPoint += 1;
+            colsCount = 1;
+
+            // 選んだ曲のテキストの配置
+            while (allText[textPoint] != '\\' && allText[textPoint] != ']' && rowsCount < 6)
+            {
+                switch (allText[textPoint])
+                {
+                    case '\r':
+                        spaceOrNewline(ref colsCount, ref rowsCount, ref prevSpace, ref textPoint, 1);
+                        textPoint += 1;
+                        break;
+                    case ' ':
+                        spaceOrNewline(ref colsCount, ref rowsCount, ref prevSpace, ref textPoint, 0);
+                        break;
+                    default:
+                        guideText.Text += allText[textPoint];
+                        break;
+                }
+                colsCount += 1;
+                textPoint += 1;
+            }
+
+            textRow = rowsCount;
+
+            if (rowsCount < 6)
+            {
+                guideText.Text = guideText.Text.Substring(0, guideText.Text.Length - 1) + Environment.NewLine;
+            }
+
+            typeCount = 0.0;
+            missTypeCount = 0.0;
+            startedTyping = false;
+            typingTime = 0.0;
+            missFlag = true;
+        }
+
+        private void Form1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (startedTyping == false)
+            {
+                startedTyping = true;
+                timer1.Start();
+            }
+
+            if (e.KeyChar == guideText.Text[guideTextPoint])
+            {
+                typingPoint.Text = typingPoint.Text.Substring(0, typingPoint.Text.Length - 1);
+                typingPoint.Text += guideText.Text[guideTextPoint];
+
+                if (e.KeyChar == (char)Keys.Enter)
+                {
+                    typingPoint.Text += Environment.NewLine + Environment.NewLine;
+                    missPoint.Text += Environment.NewLine + Environment.NewLine + Environment.NewLine;
+                    guideTextPoint += 5;
+
+                    typedRow += 1;
+
+                    if (textRow == typedRow)
+                    {
+                        textRow = 1;
+                        typedRow = 1;
+                        timer1.Stop();
+                        readFile();
+                        return;
+                    }
+                }
+                else if (missFlag)
+                {
+                    missPoint.Text += " ";
+                }
+
+                typingPoint.Text += "*";
+
+                guideTextPoint += 1;
+                typeCount += 1;
+                missFlag = true;
+            }
+            else
+            {
+                typingPoint.Text = typingPoint.Text.Substring(0, typingPoint.Text.Length - 1);
+                typingPoint.Text += e.KeyChar;
+
+                if (missFlag)
+                {
+                    missTypeCount += 1;
+                    missFlag = false;
+                    missPoint.Text += "^";
+                }
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            typingTime += timer1.Interval / 1000.0;
+            notice.Text = "所要時間：　" + Math.Round(typingTime, 1).ToString() + " 秒" + Environment.NewLine;
+            notice.Text += " ミス率 ：　" + Math.Round((missTypeCount / (missTypeCount + typeCount) * 100), 1).ToString() + " ％" + Environment.NewLine;
+            notice.Text += "字数／分：　" + Math.Round((typeCount * 60 / typingTime), 1).ToString() + Environment.NewLine;
+            notice.Text += " 評　価 ：　" + Math.Round(Math.Max(((typeCount - (missTypeCount * 10)) * 60 / typingTime), 0.0), 1).ToString() + " 点";
+        }
+    }
+}</pre>
+					</div>
+				</div>
+				<br>
+				<div>
+					<div id="button2-6vb1" style="display:inline">
+						<input type="button" value="VB ソースコード全体 展開"
+						onClick="document.getElementById('button2-6vb2').style.display='inline';
+								 document.getElementById('button2-6vb1').style.display='none'">
+					</div>
+					<div id="button2-6vb2" style="display:none">
+							<input type="button" value="VB ソースコード全体 閉じる"
+							onClick="document.getElementById('button2-6vb1').style.display='inline';
+									 document.getElementById('button2-6vb2').style.display='none'">
+						<pre class="brush:vb" title="VB ソースコード全体">
+Public Class Form1
+    Dim rand As New Random
+    Dim guideTextPoint As Integer = 0
+    Dim allText As String '読み込んだtxtファイルの文章を全て保存する
+    Dim typedRow As Integer = 1 '自分が打っている行数
+    Dim textRow As Integer = 1 'テキストの行数
+    Dim startedTyping As Boolean
+    Dim typingTime As Double
+    Dim typeCount As Double
+    Dim missTypeCount As Double
+    Dim missFlag As Boolean
+    
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        typingPoint.Parent = guideText
+        typingPoint.BackColor = Color.Transparent
+        typingPoint.Location = New Point(0, 0)
+        missPoint.Parent = typingPoint
+        missPoint.BackColor = Color.Transparent
+        missPoint.Location = New Point(0, 0)
+
+        readFile()
+    End Sub
+
+    Private Sub spaceOrNewline(ByRef colsCount As Integer, ByRef rowCount As Integer, ByRef prevSpace As Integer, ByRef textPoint As Integer, ByVal pad As Integer)
+        If (colsCount >= 70) Then
+            guideText.Text = guideText.Text.Remove(guideText.Text.Length - colsCount + prevSpace, colsCount - prevSpace)
+            guideText.Text &= Environment.NewLine & Environment.NewLine & Environment.NewLine
+            textPoint -= colsCount - prevSpace + pad
+            rowCount += 1
+            colsCount = 0
+            prevSpace = 0
+        Else
+            guideText.Text &= " "
+            prevSpace = colsCount
+        End If
+    End Sub
+
+    Private Sub readFile()
+        Dim textPoint As Integer
+        Dim colsCount As Integer = 0
+        Dim rowCount As Integer = 0
+        Dim prevSpace As Integer = 0
+        Dim temp As Integer
+
+        guideText.Text = ""
+        missPoint.Text = Environment.NewLine & Environment.NewLine & Environment.NewLine & Environment.NewLine
+        typingPoint.Text = Environment.NewLine & Environment.NewLine & Environment.NewLine & "*"
+
+        'ファイル読み込み
+        allText = My.Computer.FileSystem.ReadAllText("1.txt")
+
+        ' 文章の先頭を探す
+        textPoint = rand.Next(allText.Length - 1)
+        While allText(textPoint) <> "\"
+            textPoint = (textPoint + 1) Mod allText.Length
+        End While
+
+        temp = textPoint
+        textPoint += 1
+
+        ' タイトルの配置
+        Do While (allText(textPoint) <> vbCr)
+            guideText.Text &= allText(textPoint)
+            textPoint += 1
+        Loop
+
+        guideTextPoint = textPoint - temp + 2
+        rowCount = 1
+        guideText.Text &= Environment.NewLine
+        textPoint += 1
+        colsCount = 1
+
+        ' 選んだ曲のテキストの配置
+        While (allText(textPoint) <> "\" And allText(textPoint) <> "]" And rowCount < 6)
+            Select Case allText(textPoint)
+                Case vbCr
+                    spaceOrNewline(colsCount, rowCount, prevSpace, textPoint, 1)
+                    textPoint += 1
+                Case " "
+                    spaceOrNewline(colsCount, rowCount, prevSpace, textPoint, 0)
+                Case Else
+                    guideText.Text &= allText(textPoint)
+            End Select
+            colsCount += 1
+            textPoint += 1
+        End While
+
+        textRow = rowCount
+
+        If rowCount < 6 Then
+            guideText.Text = guideText.Text.Substring(0, guideText.Text.Length - 1) & Environment.NewLine
+        End If
+
+        typeCount = 0.0
+        missTypeCount = 0.0
+        startedTyping = False
+        typingTime = 0.0
+        missFlag = True
+    End Sub
+
+    Private Sub Form1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles MyBase.KeyPress
+        If (startedTyping = False) Then
+            startedTyping = True
+            Timer1.Start()
+        End If
+
+        If (e.KeyChar = guideText.Text(guideTextPoint)) Then
+
+            'typingPoint.Text = typingPoint.Text.Replace("*", guideText.Text(guideTextPoint))
+            Mid(typingPoint.Text, typingPoint.Text.Length, 1) = guideText.Text(guideTextPoint)
+
+            If (e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Enter)) Then
+                typingPoint.Text &= Environment.NewLine & Environment.NewLine
+                missPoint.Text &= Environment.NewLine & Environment.NewLine & Environment.NewLine
+                guideTextPoint += 5
+
+                typedRow += 1
+
+                If (textRow = typedRow) Then
+                    textRow = 1
+                    typedRow = 1
+                    Timer1.Stop()
+                    readFile()
+                    Return
+                End If
+            ElseIf (missFlag) Then
+                missPoint.Text &= " "
+            End If
+
+            typingPoint.Text &= "*"
+
+            guideTextPoint += 1
+            typeCount += 1
+            missFlag = True
+
+        Else
+            ' どういう風に間違えたかを出す
+            Mid(typingPoint.Text, typingPoint.Text.Length, 1) = e.KeyChar
+
+            ' ミス率、評価の計算に使用
+            If (missFlag) Then
+                missTypeCount += 1
+                missFlag = False
+                missPoint.Text &= "^"
+            End If
+        End If
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        typingTime += Timer1.Interval / 1000.0
+        notice.Text = "所要時間：　" + Math.Round(typingTime, 1).ToString() + " 秒" + Environment.NewLine
+        notice.Text &= " ミス率 ：　" + Math.Round((missTypeCount / typeCount * 100), 1).ToString() + " ％" + Environment.NewLine
+        notice.Text &= "字数／分：　" + Math.Round((typeCount * 60 / typingTime), 1).ToString() + Environment.NewLine
+        notice.Text &= " 評　価 ：　" + Math.Round(Math.Max(((typeCount - (missTypeCount * 10)) * 60 / typingTime), 0.0), 1).ToString() + " 点"
+    End Sub
+End Class</pre>
+					</div>
+				</div>
+				</div>
+				<br>
+				<br>
+				<a name="tag3"></a>
+				<div class="block">
+				<div class="titlefont">3. あとがき</div>
+				<hr>
+				<br>
+				こんな感じでプログラムは完成です。<br>
+				<br>
+				今回は最低限タイピングソフトと言えるものにしただけなので、<br>
+				タイピング部分の前後にメニューを入れたり、ハイスコアなどを記録するようにしたりすれば<br>
+				より本格的なタイピングソフトになるかなあと思います。<br>
+				<br>
+				</div>
+			</div>
+		</div>
+	<div class="sns_manager">
+      <ul class="circle_group">
+      <span id="sns_com">Please<br>Share!</span>
+    <li id="sns_feedly"><span id="icon-feedly"></span><script>document.write("<a id=\"Afeedly\" href=\"http://cloud.feedly.com/#subscription%2Ffeed%2Fhttp%3A%2F%2Fsssignal.web.fc2.com%2Findex.html\" onclick=\"window.open(this.href, 'Fewindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-feedly">feedly</span></li>
+    <li id="sns_facebook"><span id="icon-facebook"></span><script>document.write("<a id=\"Afacebook\" href=\"http://www.facebook.com/share.php?u="+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-facebook">facebook</span></li>
+    <li id="sns_twitter"><span id="icon-twitter"></span><script>document.write("<a id=\"Atwitter\" href=\"https://twitter.com/intent/tweet?text="+encodeURIComponent(document.title)+"&url="+window.location.href+"&via=mizzsig\"></a>");</script><span id="c-twitter">twitter</span></li>
+    <li id="sns_hatebu"><span id="icon-hatebu"></span><script>document.write("<a id=\"Ahatebu\" href=\"http://b.hatena.ne.jp/entry/"+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-hatebu">hatena bookmark</span></li>
+    <li id="sns_pocket"><span id="icon-pocket"></span><script>document.write("<a id=\"Apocket\" href=\"http://getpocket.com/edit?url="+window.location.href+"&title="+encodeURIComponent(document.title)+"\" onclick=\"window.open(this.href, 'Pwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-pocket">pocket</span></li>
+    <li id="sns_googleplus"><span id="icon-google-plus"></span><script>document.write("<a id=\"Agoogleplus\" href=\"https://plus.google.com/share?url="+window.location.href+"\" onclick=\"window.open(this.href, 'Gwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-gplus">Google plus</span></li>
+</ul>
+    </div>
+	</div>
+
+	<div id="twitter">
+	<a class="twitter-timeline" href="https://twitter.com/mizzsig" data-widget-id="711181564529352705">@mizzsigさんのツイート</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- fc2HomePageAd -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7441289104125575"
+     data-ad-slot="9712419646"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      <br>
+ <a href="https://twitter.com/intent/follow?ref_src=twsrc%5Etfw&screen_name=mizzsig&tw_p=followbutton" data-show-count="false">
+ <img id="twitter-follow-button" src="../tButton_off.png"></a>
+	</div>
+
+  	</div>
+
+ <script async type="text/javascript" src="../followButton.js"></script>
+
+  </body>
+</html>

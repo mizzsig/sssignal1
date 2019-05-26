@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>【Processing】DLA(凝集体)のプログラムを作る！ | 水飴信号 -Starch Syrup Signal-</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../columnstyle.css">
+    <script src="shCore.js"></script>
+    <script async src="shBrushJava.js"></script>
+    <link type="text/css" rel="stylesheet" href="shCoreDefault.css">
+    <script>SyntaxHighlighter.all();</script>
+    
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79013420-1', 'auto');
+  ga('send', 'pageview');
+</script>
+    <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="http://sssignal.web.fc2.com/jquery-animate-css-rotate-scale.js"></script>
+<script src="http://sssignal.web.fc2.com/snss.js"></script>
+<link rel="stylesheet" href="http://sssignal.web.fc2.com/snss_style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>  	
+
+  	<div id="wrapper">
+  	  <img width="100%" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/header.png">
+
+      <ul class="ulbtn">
+        <a class="btn" href="http://sssignal.web.fc2.com/">Top</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/about.html">About</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/gamesoft.html">Game & Soft</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/review.html">CD Review</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/column.html" style="background:#F0F0FF;">Column</a>
+        <a class="btn" href="http://sssignal.web.fc2.com/link.html">Link</a>
+      </ul>
+
+	<div class="place"><a href="../column.html">Column</a> > 【Processing】DLA(凝集体)のプログラムを作る！</div>
+		
+	<div id="main-left">
+		<div class="boxhead">2016/7/31 【Processing】DLA(凝集体)のプログラムを作る！</div>
+		<div class="box">
+			<div class="columnspring">
+				<br>
+				この前、図書館をテキトーにうろついていると、DLAというものについて書かれた本を見つけました。<br>
+				DLA(Diffusion-Limited-Aggregationの略)とは、<br>
+				動き回っている大量の粒子がお互いにくっついていって大きくなることで、<br>
+				DLAによって作られた大きな塊のことを<b>凝集体(ぎょうしゅうたい)</b>というそうです。<br>
+				<br>
+				凝集体の画像を見てみると、小さな粒がたくさんくっついて何度も枝分かれをしながら<br>
+				大きな形を作っていて、<b>面白そう！</b>と思ったのでProcessingでプログラムを作ってみました。<br>
+				<br>
+				<br>
+				<hr>
+				<br>
+				<br>
+				<div class="toc">
+					<div class="toctitle">目次</div>
+					<ul>
+						<li><a href="#gaiyo">1. 凝集体の作り方</a></li>
+						<li>
+						<a href="#gaiyop">2. プログラム</a>
+						<ul>
+							<li><a href="#gaiyop">2-1. 概要</a></li>
+							<li><a href="#set">2-2. 粒子の設置、移動範囲の決定</a></li>
+							<li><a href="#init">2-3. 粒子の初期化</a></li>
+							<li><a href="#rwalk">2-4. ランダムウォーク、境界部分の処理</a></li>
+							<li><a href="#touch">2-5. 粒子の衝突</a></li>
+							<li><a href="#toend">2-6. 終了処理</a></li>
+							<li><a href="#source">2-7. ソースコード</a></li>
+						</ul>
+						</li>
+						<li><a href="#result">3. 実行結果</a></li>
+						<li><a href="#omake">4. おまけ</a></li>
+					</ul>
+				</div>
+				<br>
+				<br>
+				<a name="gaiyo"></a>
+				<div class="titlefont">1. 凝集体の作り方</div>
+				<hr>
+				<br>
+				ネットで調べてみたところ、凝集体の作り方としては<br>
+				<b>一度に大量の粒子を動かしてくっつけていく方法</b>と、<br>
+				<b>粒子を一つずつ飛ばしてくっつける方法</b>があるようなのですが、<br>
+				今回は後者の一つずつ飛ばしてくっつけるやり方でやってみます。<br>
+				<br>
+				<div align="center">
+					<img class="img50" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/createDLA1.png" width="300">
+					<img class="img50" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/createDLA2.png" width="300">
+				</div>
+				図にするとこんな感じです。<br>
+				<br>
+				緑色の線がくっついている粒子で、赤色の線が粒子の動きです。<br>
+				今使っているパソコンがそこまで良いスペックのものではないので、<br>
+				一つずつ飛ばしたほうが時間はかかりそうだけど処理が軽いかな？と思い選びました。<br>
+				<br>
+				<br>
+				<a name="gaiyop"></a>
+				<div class="titlefont">2. プログラム</div>
+				<div class="titlefont">2-1. 概要</div>
+				<hr>
+				<br>
+				ここからはプログラムを組んでいきます。<br>
+				<br>
+				基本は画面の端から粒子を飛ばしていき、<br>
+				ほかの粒子にぶつかるまで待つという方法なのですが、<br>
+				そうすると、大きい画面で凝集体を作るときにかなり時間がかかってしまうので、<br>
+				<b>凝集体の大きさに合わせて少しずつ粒子を飛ばす範囲を広げる</b>ような感じにしました。<br>
+				<br>
+				<div align="center">
+					<img class="img50" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/createDLA3.png" width="300">
+					<img class="img50" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/createDLA4.png" width="300">
+				</div>
+				図はこんな感じです。<br>
+				<br>
+				飛ばしている粒子は凝集体の大きさに合わせて作られた青い枠の中だけで飛ぶことで<br>
+				大きな画面で始めたときに中々ほかの粒子にぶつからず、<br>
+				計算時間が長くなるということが起こらないようにします。<br>
+				<br>
+				<div align="center">
+					<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/createDLA5.png" width="300">
+				</div>
+				また、粒子が他の粒子と衝突したかどうかの判定は画素の値を用いて行います。<br>
+				あらかじめ背景を黒色にしておき、そこに黒以外の色の粒子を設置し、粒子を飛ばします。<br>
+				<br>
+				飛ばされた粒子が移動した先の画素が黒色でなければ、<br>
+				そこには凝集体があるということになるので、<b>後ろに下がって凝集体にくっつく</b>ようにします。<br>
+				
+				<br>
+				<br>
+				<a name="set"></a>
+				<div class="titlefont">2-2. 粒子の設置、移動範囲の決定</div>
+				<hr>
+				<br>
+				今回のプログラムでは、粒子が他の粒子とぶつからないとくっつかず、<br>
+				粒子は一つずつ飛ばしていくため、<br>
+				<b>初めに動かない粒子を最低一つは置いておかなければいけません。</b><br>
+				<br>
+				また、凝集体の大きさに合わせて粒子が飛ぶ範囲が広がっていくため、粒子がくっつく度に<br>
+				粒子の飛ぶ範囲を広げていきます。<br>
+				
+				<pre class="brush:java;">
+int fieldEdge[] = {100000, 100000, 0, 0};
+int padding = 10;
+
+// 粒子が飛ぶ範囲の更新
+void updateEdge(int x, int y){
+  fieldEdge[0] = Math.min(fieldEdge[0], x - padding);
+  fieldEdge[1] = Math.min(fieldEdge[1], y - padding);
+  fieldEdge[2] = Math.max(fieldEdge[2], x + padding);
+  fieldEdge[3] = Math.max(fieldEdge[3], y + padding);
+}
+
+// 粒子の設置
+void setPoint(int x, int y, color c){
+  stroke(c);
+  point(x, y);
+  updateEdge(x, y);
+}</pre>
+				プログラムはこんな感じになりました。<br>
+				<br>
+				粒子が飛ぶ範囲についてですが、凝集体とぴったりくっついた範囲にしてしまうと<br>
+				新しく飛ばした粒子が全然飛び回らずに凝集体と衝突してしまう恐れがあるので<br>
+				paddingという変数を用いて<br>
+				<b>凝集体とはある程度離れた場所から新しい粒子が出てくる</b>ようにします。<br>
+				<div align="center">
+					<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/createDLA6.png" width="450">
+				</div>
+				<br>
+				<br>
+				<a name="init"></a>
+				<div class="titlefont">2-3. 粒子の初期化</div>
+				<hr>
+				<br>
+				粒子を設置した後は、飛ばす粒子の初期化を行います。<br>
+				<br>
+				プログラムは以下のようになりました。<br>
+				<pre class="brush:java;">
+int x, y;
+				
+void dotInit(){
+  switch((int)random(4)){
+    case 0:
+      x = Math.max(fieldEdge[0] - padding, 0);
+      y = (int)random(fieldEdge[3] - fieldEdge[1] + 2 * padding) + fieldEdge[1] - padding;
+      break;
+    case 1:
+      x = Math.min(fieldEdge[2] + padding, width - 1);
+      y = (int)random(fieldEdge[3] - fieldEdge[1] + 2 * padding) + fieldEdge[1] - padding;
+      break;
+    case 2:
+      x = (int)random(fieldEdge[2] - fieldEdge[0] + 2 * padding) + fieldEdge[0] - padding;
+      y = Math.max(fieldEdge[1] - padding, 0);
+      break;
+    case 3:
+      x = (int)random(fieldEdge[2] - fieldEdge[0] + 2 * padding) + fieldEdge[0] - padding;
+      y = Math.min(fieldEdge[3] + padding, height - 1);
+      break;
+  }
+}</pre>
+				基本的には、粒子が動くことのできる範囲の境界線上のどこかに<br>
+				新しい粒子が現れるようになっています。<br>
+				<br>
+				しかし、凝集体が既に十分大きくなっていて画面の端の方まで来ているときは、<br>
+				それ以上範囲を広げることが出来ないので、その時は画面の端までで止まるように<br>
+				Math.maxやMath.minを使って調整しています。<br>
+				<div align="center">
+					<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/createDLA7.png" width="350">
+				</div>
+				<br>
+				<br>
+				<a name="rwalk"></a>
+				<div class="titlefont">2-4. ランダムウォーク、境界部分の処理</div>
+				<hr>
+				<br>
+				新しい粒子を設置出来たら、次は粒子を動かします。<br>
+				DLAにおける粒子の動きは<b>ランダムウォーク</b>と呼ばれているそうで、<br>
+				その名の通り、粒子がただ乱数でいろいろな方向に移動するというものです。<br>
+				<pre class="brush:java;">
+int dx[] = {1, 0, -1, 0, 1, 1, -1, -1};
+int dy[] = {0, 1, 0, -1, 1, -1, 1, -1};
+
+/* 
+   関数を呼ぶときはこんな感じです
+   int tmp = (int)random(8);
+   dotMove(dx[tmp], dy[tmp]);
+*/
+
+void dotMove(int DX, int DY){
+  x += DX;
+  y += DY;
+
+  // x座標がはみ出ていないかチェック
+  if(x > Math.min(fieldEdge[2] + padding, width - 1)){
+    x = Math.max(fieldEdge[0] - padding, 0);
+  }
+  else if(x < Math.max(fieldEdge[0] - padding, 0)){
+    x = Math.min(fieldEdge[2] + padding, width - 1);
+  }
+  
+  // y座標がはみ出ていないかチェック
+  if(y > Math.min(fieldEdge[3] + padding, height - 1)){ 
+    y = Math.max(fieldEdge[1] - padding, 0);
+  }
+  else if(y < Math.max(fieldEdge[1] - padding, 0)){
+    y = Math.min(fieldEdge[3] + padding, height - 1);
+  }
+}</pre>
+				プログラムはこんな感じです。<br>
+				<br>
+				このプログラムでは、上下左右と斜めの８方向に移動するようにしています。<br>
+				また、粒子の座標が移動するのはこの関数が呼び出された時だけなので<br>
+				座標が移動可能範囲から出ていないかのチェックも行っています。<br>
+				<br>
+				<b>粒子の座標がはみ出していたときは、反対側から出てくるようになっています。</b><br>
+				<div align="center">
+					<img class="img50" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/createDLA8.png" width="300">
+					<img class="img50" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/createDLA9.png" width="300">
+				</div>
+				<br>
+				<br>
+				<a name="touch"></a>
+				<div class="titlefont">2-5. 粒子の衝突</div>
+				<hr>
+				<br>
+				前の章で粒子が移動するようになったので、次は凝集体と接触した時を考えます。<br>
+				<br>
+				粒子は今いる座標の色が黒の時は移動を続けて、<br>
+				座標が黒以外の所に着いたときに移動を終了します。<br>
+				<br>
+				そのため、凝集体とくっつくようにするには、<br>
+				<b>今いる座標の一手前の座標に戻り</b>、そこを塗る必要があります。<br>
+				<br>
+				<br>
+				粒子の初期化、移動の部分と合わせると、下のようなプログラムになります。<br>
+				<pre class="brush:java;">
+// 粒子の初期化
+dotInit();
+int tmp = -1;
+
+// 粒子の移動
+while(get(x, y) == color(0, 0, 0)){
+  tmp = (int)random(8);
+  dotMove(dx[tmp], dy[tmp]);
+}
+
+// 粒子が衝突したので、一手戻り描画する
+if(tmp > -1){
+  dotMove(-dx[tmp], -dy[tmp]);
+  setPoint(x, y, color((int)random(50) + 50, (int)random(100) + 150, (int)random(50) + 50));
+}</pre>
+				while文を抜ける前と抜けた後では、変数tmpの値は変わっていないので<br>
+				<b>dx[tmp]とdy[tmp]に-をつけて移動させると一手前の座標に戻る</b>ことができます。<br>
+				<br>
+				また、新しく飛ばされた粒子の初期位置に既に粒子がいた場合は、<br>
+				一手前に戻ることが出来ないので、その場合はif文で弾いて無かったことにしています。<br>
+				<br>
+				14行目のsetPoint()関数で指定している色は適当です。<br>
+				今回は緑っぽい色にしてみました。<br>
+				<br>
+				<br>
+				<a name="toend"></a>
+				<div class="titlefont">2-6. 終了処理</div>
+				<hr>
+				<br>
+				最後にプログラムを終了させる処理を作ります。<br>
+				<br>
+				粒子が画面の端まで到達してしまうと、そこから粒子が一気に横に広がっていって<br>
+				<b>凝集体がなんとなく汚い感じになってしまうので</b>粒子が端に到達した時点で終了させます。<br>
+				<br>
+				プログラムは下のようになりました。<br>
+				<pre class="brush:java;">
+void reachToEnd(){
+  if((x == 0) || (x == width - 1) || (y == 0) || (y == height - 1)){
+    save("result.png");
+    exit();
+  }
+}</pre>
+				プログラムを終了する際に、その時の画面を画像に出力するようにしました。<br>
+				<br>
+				<br>
+				<a name="source"></a>
+				<div class="titlefont">2-7. ソースコード</div>
+				<hr>
+				<br>
+				上の方で書いてきたプログラムを繋ぎ合わせると、<br>
+				最終的なソースコードは下のようになりました。<br>
+				<br>
+				<pre class="brush:java;">
+int fieldEdge[] = {100000, 100000, 0, 0};
+int padding = 10;
+int dx[] = {1, 0, -1, 0, 1, 1, -1, -1};
+int dy[] = {0, 1, 0, -1, 1, -1, 1, -1};
+int x, y;
+
+void setup(){
+  size(600, 600);
+  background(0, 0, 0);
+  setPoint(width / 2, height / 2, color(0, 150 ,0));
+}
+
+void draw(){
+  for(int i = 0; i < 20; i++){
+    dotInit();
+    int tmp = -1;
+    while(get(x, y) == color(0, 0, 0)){
+      tmp = (int)random(8);
+      dotMove(dx[tmp], dy[tmp]);
+    }
+    if(tmp > -1){
+      dotMove(-dx[tmp], -dy[tmp]);
+      reachToEnd();
+      setPoint(x, y, color((int)random(50) + 50, (int)random(100) + 150, (int)random(50) + 50));
+    }
+  }
+}
+
+void reachToEnd(){
+  if((x == 0) || (x == width - 1) || (y == 0) || (y == height - 1)){
+    save("result.png");
+    exit();
+  }
+}
+
+void updateEdge(int x, int y){
+  fieldEdge[0] = Math.min(fieldEdge[0], x - padding);
+  fieldEdge[1] = Math.min(fieldEdge[1], y - padding);
+  fieldEdge[2] = Math.max(fieldEdge[2], x + padding);
+  fieldEdge[3] = Math.max(fieldEdge[3], y + padding);
+}
+
+void setPoint(int x, int y, color c){
+  stroke(c);
+  point(x, y);
+  updateEdge(x, y);
+}
+
+void dotInit(){
+  switch((int)random(4)){
+    case 0:
+      x = Math.max(fieldEdge[0], 0);
+      y = (int)random(fieldEdge[3] - fieldEdge[1] + 2 * padding) + fieldEdge[1] - padding;
+      break;
+    case 1:
+      x = Math.min(fieldEdge[2], width - 1);
+      y = (int)random(fieldEdge[3] - fieldEdge[1] + 2 * padding) + fieldEdge[1] - padding;
+      break;
+    case 2:
+      x = (int)random(fieldEdge[2] - fieldEdge[0] + 2 * padding) + fieldEdge[0] - padding;
+      y = Math.max(fieldEdge[1], 0);
+      break;
+    case 3:
+      x = (int)random(fieldEdge[2] - fieldEdge[0] + 2 * padding) + fieldEdge[0] - padding;
+      y = Math.min(fieldEdge[3], height - 1);
+      break;
+  }
+}
+
+void dotMove(int DX, int DY){
+  x += DX;
+  y += DY;
+  if(x > Math.min(fieldEdge[2], width - 1)){
+    x = Math.max(fieldEdge[0], 0);
+  }
+  else if(x < Math.max(fieldEdge[0], 0)){
+    x = Math.min(fieldEdge[2], width - 1);
+  }
+  
+  if(y > Math.min(fieldEdge[3], height - 1)){
+    y = Math.max(fieldEdge[1], 0);
+  }
+  else if(y < Math.max(fieldEdge[1], 0)){
+    y = Math.min(fieldEdge[3], height - 1);
+  }
+}</pre>
+				基本的にはそれぞれの章で書いたものを繋げただけですが、<br>
+				特筆すべき点として、draw()関数全体をfor文でくくっています。<br>
+				for文でくくらない場合は、１ドットずつしか描画出来ませんが、<br>
+				ループの回数だけまとめて描画できるようになります。<br>
+				ただ、その分だけ処理も重たくなるので、<br>
+				そのあたりは自分のパソコンと相談かなあと思います。<br>
+				<br>
+				<br>
+				<a name="result"></a>
+				<div class="titlefont">3. 実行結果</div>
+				<hr>
+				<br>
+                作ったプログラムを実際に動かした結果は、以下のようになりました。<br>
+                <br>
+                <iframe class="img100" width="420" height="315" src="https://www.youtube.com/embed/kQsraoGiHGs" frameborder="0" allowfullscreen></iframe>
+                <br>
+                とりあえずはちゃんと動いてそうな感じです。<br>
+                <br>
+                <br>
+                <a name="omake"></a>
+                <div class="titlefont">4. おまけ</div>
+                <hr>
+                <br>
+                ただの一発ネタですが、上のプログラムを少し変更して作ってみました。<br>
+                <br>
+                <blockquote class="twitter-tweet" data-lang="ja"><p lang="ja" dir="ltr">闇の力を欲してみました <a href="https://t.co/qXTIjKYS5o">pic.twitter.com/qXTIjKYS5o</a></p>— とえら (@mizzsig) <a href="https://twitter.com/mizzsig/status/759344835786530816">2016年7月30日</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+				<br>
+                読み込んだ画像をエッジ抽出して、エッジの部分で粒子の衝突判定が起こるようにしています。<br>
+                <br>
+                微妙にエッジが取れていない部分があって、少しはみ出しているのが残念ですが……<br>
+                <br>
+			</div>
+		</div>
+	<div class="sns_manager">
+      <ul class="circle_group">
+      <span id="sns_com">Please<br>Share!</span>
+    <li id="sns_feedly"><span id="icon-feedly"></span><script>document.write("<a id=\"Afeedly\" href=\"http://cloud.feedly.com/#subscription%2Ffeed%2Fhttp%3A%2F%2Fsssignal.web.fc2.com%2Findex.html\" onclick=\"window.open(this.href, 'Fewindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-feedly">feedly</span></li>
+    <li id="sns_facebook"><span id="icon-facebook"></span><script>document.write("<a id=\"Afacebook\" href=\"http://www.facebook.com/share.php?u="+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-facebook">facebook</span></li>
+    <li id="sns_twitter"><span id="icon-twitter"></span><script>document.write("<a id=\"Atwitter\" href=\"https://twitter.com/intent/tweet?text="+encodeURIComponent(document.title)+"&url="+window.location.href+"&via=mizzsig\"></a>");</script><span id="c-twitter">twitter</span></li>
+    <li id="sns_hatebu"><span id="icon-hatebu"></span><script>document.write("<a id=\"Ahatebu\" href=\"http://b.hatena.ne.jp/entry/"+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-hatebu">hatena bookmark</span></li>
+    <li id="sns_pocket"><span id="icon-pocket"></span><script>document.write("<a id=\"Apocket\" href=\"http://getpocket.com/edit?url="+window.location.href+"&title="+encodeURIComponent(document.title)+"\" onclick=\"window.open(this.href, 'Pwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-pocket">pocket</span></li>
+    <li id="sns_googleplus"><span id="icon-google-plus"></span><script>document.write("<a id=\"Agoogleplus\" href=\"https://plus.google.com/share?url="+window.location.href+"\" onclick=\"window.open(this.href, 'Gwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-gplus">Google plus</span></li>
+</ul>
+    </div>
+	</div>
+
+	<div id="twitter">
+	<a class="twitter-timeline" href="https://twitter.com/mizzsig" data-widget-id="711181564529352705">@mizzsigさんのツイート</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<br>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- fc2HomePageAd -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7441289104125575"
+     data-ad-slot="9712419646"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      <br>
+ <a href="https://twitter.com/intent/follow?ref_src=twsrc%5Etfw&screen_name=mizzsig&tw_p=followbutton" data-show-count="false">
+ <img id="twitter-follow-button" src="../tButton_off.png"></a>
+	</div>
+
+  	</div>
+
+ <script async type="text/javascript" src="../followButton.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>【C#, VB】ペイントソフトの「進む」「戻る」機能の作成 | 水飴信号 -Starch Syrup Signal-</title>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+  <link rel="stylesheet" type="text/css" href="/columnstyle.css">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <!-- prism.js (syntax highlight) -->
+  <link rel="stylesheet" href="/prism.css">
+  <script src="/prism.js"></script>
+  <!-- Google Analytics -->
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79013420-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script type="text/javascript" src="http://sssignal.web.fc2.com/jquery-animate-css-rotate-scale.js"></script>
+  <script src="http://sssignal.web.fc2.com/snss.js"></script>
+  <link rel="stylesheet" href="http://sssignal.web.fc2.com/snss_style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- React and Babel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+  <!-- Twitter Cards ここから-->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@mizzsig" />
+  <meta name="twitter:title" content="【C#, VB】ペイントソフトの「進む」「戻る」機能の作成 | 水飴信号 - Starch Syrup Signal -" />
+  <meta name="twitter:description" content="ペイントソフトの「進む」「戻る」機能を作ってみました。" />
+  <meta name="twitter:image" content="http://blog-imgs-106.fc2.com/s/s/s/sssignal/paint_redo_undo_ss.png" />
+  <!-- Twitter Cards ここまで -->
+</head>
+<body>
+
+  <div id="wrapper">
+    <div id="header"></div>
+    <script>var highlight = 4;</script>
+    <script type="text/babel" src="/header.js"></script>
+
+    <div class="place"><a href="/column.html">Column</a> > 【C#, VB】ペイントソフトの「進む」「戻る」機能の作成</div>
+
+    <div id="main-left">
+      <div class="boxhead">2017/6/28 【C#, VB】ペイントソフトの「進む」「戻る」機能の作成 </div>
+      <div class="box">
+        <br>
+        1年ほど前に<a href="./column4.html">C#とVBでペイントソフトみたいな線を描く記事</a>を書きましたが、<br>
+        ペイントソフトなら「進む」と「戻る」の機能も欲しいよなと思ったので作ってみました。<br>
+        <br>
+        実際に動いている様子が下の通りです。<br>
+        <iframe width="100%" height="315" src="https://www.youtube.com/embed/un94dWWkHtM" frameborder="0" allowfullscreen></iframe><br>
+        <br>
+        作り方は以下の通りです。<br>
+        <br>
+        <hr>
+        <div class="titleFont">フォーム</div>
+        <hr>
+        <br>
+        フォームのデザインは下のような感じです。<br><br>
+        <img width="100%" class="img100" src="http://blog-imgs-106.fc2.com/s/s/s/sssignal/paint_redo_undo_form.png"><br><br>
+        <a href="./column4.html">前の記事</a>ではフォームに線を直接描いていましたが、<br>
+        よりペイントソフトっぽくするために描画用のpictureBoxを用意して、<br>
+        上に戻ると進む用のメニューボタンを取り付けました。<br>
+        <br>
+        <hr>
+        <div class="titleFont">プログラム概要</div>
+        <hr>
+        <br>
+        「進む」「戻る」機能の実装方法としては、マウスをクリックして線を描き始めてから<br>
+        マウスが離れて描画が終了するごとに現在の画面を配列に保存し、<br>
+        「進む」「戻る」のボタンが押されるとpictureBoxの画像をそれに対応したものに<br>
+        差し替えるという感じの処理にしました。<br>
+        <br>
+        <hr>
+        <div class="titleFont">プログラム</div>
+        <hr>
+        <br>
+        実際に<a href="#cSharp">C#で作ったプログラム</a>と<a href="#VB">VBで作ったプログラム</a>は下のようになりました。<br>
+        <a name="cSharp">
+        <pre class="line-numbers"><code class="language-cSharp" data-language="cSharp">using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace paintSoftTest
+{
+    public partial class Form1 : Form
+    {
+        private const int LINE_WEIGHT = 5;
+        private bool mouseDrug;
+        private bool mouseDrawed;
+        private int prevX;
+        private int prevY;
+        private List<Image> imgList;
+        private int imgIndex;
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            init();
+        }
+
+        private void init()
+        {
+            // 変数の初期化
+            mouseDrug = false;
+            mouseDrawed = false;
+            imgList = new List<Image>();
+            imgIndex = 0;
+            
+            // 白紙の状態をリストに追加
+            Bitmap tmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            pictureBox1.Image = tmp;
+            imgList.Add(pictureBox1.Image);
+        }
+
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // 1つ前の状態に戻る
+            if(imgIndex > 0)
+            {
+                imgIndex--;
+            }
+            pictureBox1.Image = imgList[imgIndex];
+        }
+
+        private void redoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // 1つ後の状態に進む
+            if(imgIndex < imgList.Count - 1)
+            {
+                imgIndex++;
+            }
+            pictureBox1.Image = imgList[imgIndex];
+        }
+
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            // 1つ前のマウスの位置を記録
+            mouseDrug = true;
+            prevX = e.Location.X;
+            prevY = e.Location.Y;
+            drawLine(e);
+        }
+
+        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+            // 後のリストを全て削除
+            removeListAfterIndex();
+
+            mouseDrug = false;
+            // 今の状態をリストに追加
+            if (mouseDrawed)
+            {
+                mouseDrawed = false;
+                imgList.Add(pictureBox1.Image);
+                imgIndex = imgList.Count - 1;
+            }
+        }
+
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDrug)
+            {
+                mouseDrawed = true;
+                drawLine(e);
+            }
+        }
+
+        private void removeListAfterIndex()
+        {
+            while(imgIndex + 1 < imgList.Count)
+            {
+                imgList.RemoveAt(imgIndex + 1);
+            }
+        }
+
+        private void drawLine(MouseEventArgs e)
+        {
+            Bitmap canvas = new Bitmap(pictureBox1.Image);
+            Pen objPen = new Pen(System.Drawing.Color.Black, LINE_WEIGHT);
+            Graphics objGrp = Graphics.FromImage(canvas);
+            objGrp.DrawLine(objPen, prevX, prevY, e.Location.X, e.Location.Y);
+            objGrp.FillEllipse(Brushes.Black, prevX - objPen.Width / 2, prevY - objPen.Width / 2, objPen.Width, objPen.Width);
+            prevX = e.Location.X;
+            prevY = e.Location.Y;
+
+            objPen.Dispose();
+            objGrp.Dispose();
+
+            pictureBox1.Image = canvas;
+        }
+    }
+}</code></pre>
+      <a name="VB">
+      <pre class="line-numbers"><code class="language-vbNet" data-language="vbNet">Public Class Form1
+    Const LINE_WEIGHT As Integer = 5
+    Private mouseDrug As Boolean
+    Private mouseDrawed As Boolean
+    Private prevX As Integer
+    Private prevY As Integer
+    Private imgList As List(Of Image)
+    Private imgIndex As Integer
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        init()
+    End Sub
+
+    Private Sub init()
+        ' 変数の初期化
+        mouseDrug = False
+        mouseDrawed = True
+        imgList = New List(Of Image)
+        imgIndex = 0
+
+        ' 白紙の状態をリストに追加
+        Dim tmp As Bitmap = New Bitmap(pictureBox1.Width, pictureBox1.Height)
+        pictureBox1.Image = tmp
+        imgList.Add(pictureBox1.Image)
+    End Sub
+
+    Private Sub undoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles undoToolStripMenuItem.Click
+        ' 1つ前の状態に戻る
+        If imgIndex > 0 Then
+            imgIndex -= 1
+        End If
+        pictureBox1.Image = imgList(imgIndex)
+    End Sub
+
+    Private Sub redoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles redoToolStripMenuItem.Click
+        ' 1つ後の状態に進む
+        If imgIndex < imgList.Count - 1 Then
+            imgIndex += 1
+        End If
+        pictureBox1.Image = imgList(imgIndex)
+    End Sub
+
+    Private Sub PictureBox1_MouseDown(sender As Object, e As MouseEventArgs) Handles pictureBox1.MouseDown
+        ' 1つ前のマウスの位置を記録
+        mouseDrug = True
+        prevX = e.Location.X
+        prevY = e.Location.Y
+        drawLine(e)
+    End Sub
+
+    Private Sub PictureBox1_MouseUp(sender As Object, e As MouseEventArgs) Handles pictureBox1.MouseUp
+        ' 後のリストを全て削除
+        removeListAfterIndex()
+
+        mouseDrug = False
+        ' 今の状態をリストに追加
+        If mouseDrawed Then
+            mouseDrawed = False
+            imgList.Add(pictureBox1.Image)
+            imgIndex = imgList.Count - 1
+        End If
+    End Sub
+
+    Private Sub PictureBox1_MouseMove(sender As Object, e As MouseEventArgs) Handles pictureBox1.MouseMove
+        If mouseDrug Then
+            mouseDrawed = True
+            drawLine(e)
+        End If
+    End Sub
+
+    Private Sub removeListAfterIndex()
+        While imgIndex + 1 < imgList.Count
+            imgList.RemoveAt(imgIndex + 1)
+        End While
+    End Sub
+
+    Private Sub drawLine(e As MouseEventArgs)
+        Dim canvas = New Bitmap(pictureBox1.Image)
+        Dim objPen = New Pen(System.Drawing.Color.Black, LINE_WEIGHT)
+        Dim objGrp = Graphics.FromImage(canvas)
+        objGrp.DrawLine(objPen, prevX, prevY, e.Location.X, e.Location.Y)
+        objGrp.FillEllipse(Brushes.Black, prevX - objPen.Width / 2, prevY - objPen.Width / 2, objPen.Width, objPen.Width)
+        prevX = e.Location.X
+        prevY = e.Location.Y
+
+        objPen.Dispose()
+        objPen.Dispose()
+
+        pictureBox1.Image = canvas
+    End Sub
+End Class</code></pre>
+        <br>
+        線を書き終わったとき(<b>PictureBox1_MouseUp()</b>)のpictureBox1の状態を<br>
+        imgListに保存し、「進む」と「戻る」ボタンをクリックすることで<br>
+        画面に表示させる画像のインデックス(<b>imgIndex</b>)を操作しています。<br>
+        <br>
+        また、描き終わったときにただただ画像をリストに追加するだけだと、<br>
+        「戻る」ボタンを押してから新しい線を描いた場合に<br>
+        昔の画像が残ったままになってしまうので<br>
+        線を描き終わった後に、今のインデックスより後に残っている画像があれば<br>
+        それらを全て削除するようにしています(<b>removeListAfterIndex()</b>)<br>
+        <br>
+        <img width="100%" src="http://blog-imgs-106.fc2.com/s/s/s/sssignal/paint_redo_undo_figure.png">
+        <br>
+        <br>
+        <hr>
+        <br>
+        こんな感じで今回の記事は終了です。<br>
+        「進む」「戻る」の機能を実装することはできましたが、<br>
+        描画の際に裏画面での処理などを全くせずに<br>
+        描画したものを直接表示させてしまっていることと、<br>
+        リストに追加する画像の数に制限をかけていないので、大量に線を描かれると<br>
+        メモリをかなり食いそうな気がするのでその2点には注意かなと思います。<br>
+        <br>
+      </div>
+    </div>
+
+    <div id="twitter">
+      <a class="twitter-timeline" href="https://twitter.com/mizzsig" data-widget-id="711181564529352705">@mizzsigさんのツイート</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+      <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+      <!-- fc2HomePageAd -->
+      <ins class="adsbygoogle"
+      style="display:block"
+      data-ad-client="ca-pub-7441289104125575"
+      data-ad-slot="9712419646"
+      data-ad-format="auto"></ins>
+      <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      <br>
+    </div>
+  </div>
+</body>
+</html>

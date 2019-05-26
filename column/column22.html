@@ -1,0 +1,360 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>【html, jQuery, PHP】メールフォームを作る | 水飴信号 -Starch Syrup Signal-</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../columnstyle.css">
+    <script src="shCore.js"></script>
+    <script async src="shBrushCss.js"></script>
+    <script async src="shBrushJScript.js"></script>
+    <script async src="shBrushPhp.js"></script>
+    <script async src="shBrushXml.js"></script>
+    <link type="text/css" rel="stylesheet" href="shCoreDefault.css">
+    <script>SyntaxHighlighter.all();</script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79013420-1', 'auto');
+  ga('send', 'pageview');
+</script>
+    <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="http://sssignal.web.fc2.com/jquery-animate-css-rotate-scale.js"></script>
+<script src="http://sssignal.web.fc2.com/snss.js"></script>
+<link rel="stylesheet" href="http://sssignal.web.fc2.com/snss_style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>  	
+	<div id="wrapper">
+	  <img width="100%" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/header.png">
+
+		<ul class="ulbtn">
+			<a class="btn" href="http://sssignal.web.fc2.com/">Top</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/about.html">About</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/gamesoft.html">Game & Soft</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/review.html">CD Review</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/column.html" style="background:#F0F0FF;">Column</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/link.html">Link</a>
+		</ul>
+
+		<div class="place"><a href="../column.html">Column</a> >【html, jQuery, PHP】メールフォームを作る </div>
+		
+		<div id="main-left">
+			<div class="boxhead">2017/1/2 【html, jQuery, PHP】メールフォームを作る</div>
+			<div class="box">
+				<div class="columnspring">
+					<br>
+					このサイトの<a href="../about.html">Aboutページ</a>にあるメールフォーム、<br>
+					今までは忍者メールフォームをそのまま使っていたのですが<br>
+					PHPやjQueryなどの勉強ついでに作ってみました。<br>
+					<br>
+					実際に動いている様子は下の通りです。<br>
+					<br>
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/lefB8Hp2JoE" frameborder="0" allowfullscreen></iframe><br>
+					<br>
+					作り方を以下に書いていきます。<br>
+					<br>
+					<hr>
+					<br>
+					<br>
+					<div class="toc">
+						<div class="toctitle">目次</div>
+						<ul>
+							<li><a href="#tag1">1. 概要</a></li>
+							<li><a href="#tag2">2. html</a></li>
+							<li><a href="#tag3">3. jQuery</a></li>
+							<li><a href="#tag4">4. PHP</a></li>
+							<li><a href="#tag5">5. メールフォーム読み込み(html)</a></li>
+							<li><a href="#tag6">6. ソースコード全体</a></li>
+						</ul>
+					</div>
+					<br>
+					<br>
+					<br>
+					<a name="tag1">
+					<div class="block">
+						<div class="titleFont">1. 概要</div>
+						<hr><br>
+						今回作るメールフォームに入力する項目は<br>
+						名前、メールアドレス、件名、本文の４つで、<br>
+						<b>本文だけは入力必須</b>ですが、他の入力は任意とします。<br>
+						<br>
+						メールを送信する部分はPHPやJavaScriptなどで作ることが出来ますが、<br>
+						JavaScriptで普通に作ってしまうと<b>メールアドレスが丸見え状態</b>になってしまうので<br>
+						PHPで作ることにしました。<br>
+						<br>
+						ですが、今このサイトで使っている<b>FC2の無料サーバーはPHPが使えないので</b><br>
+						メールフォームの本体は<b>Xdomainサーバー</b>に作り、<br>
+						それを<b>FC2側から呼び出して</b>使うようにしました。<br>
+						<br>
+						最終的なファイル構成は下のような感じです。<br>
+						<br>
+						<img class="img100" src="http://blog-imgs-100.fc2.com/s/s/s/sssignal/createMailform1.png"><br>
+					</div>
+					<br><br><br>
+					<a name="tag2">
+					<div class="block">
+						<div class="titleFont">2. html</div>
+						<hr><br>
+						まずはメールフォームのhtmlを書いていきます。<br>
+						<pre class="brush:html" title="mailForm.html">
+&lt;body&gt;
+	<div class="mailform">
+		<form action="sendMail.php" method="post">
+			<div class="title">メールフォーム</div>
+			名前<br>
+			&lt;input class="inputbody" type="text" name="name"&gt;<br><br>
+			メールアドレス<br>
+			&lt;input class="inputbody" type="text" name="email"&gt;<br><br>
+			件名<br>
+			&lt;input class="inputbody" type="text" name="about"&gt;<br><br>
+			<b>本文(必須)</b><br>
+			&lt;textarea id="textareabody" class="inputbody" type="text" name="main"&gt;&lt;/textarea&gt;
+			<br><br><div id="message">※※※ 本文を入力してください ※※※</div><br>
+			&lt;input class="submitbody" type="submit" name="送信"&gt;
+		</form>
+	</div>
+&lt;/body&gt;</pre>
+						<br>
+						プログラムはこうなりました。<br>
+						<br>
+						フォームに入力された４種類の情報をPOSTメソッドでsendMail.phpに送っています。<br>
+						<br>
+						本文が入力されないまま送信ボタンが押されてしまったときの対策として、<br>
+						送信ボタンの上に <b>※※※ 本文を入力してください ※※※</b><br>
+						という警告メッセージを出すスペースを空けています。<br>
+						<br>
+					</div>
+					<br><br><br>
+					<a name="tag3">
+					<div class="block">
+						<div class="titleFont">3. jQuery</div>
+						<hr><br>
+						次に、先程作ったフォームに動きを付けるためのjQueryを書いていきます。<br>
+						<br>
+						マウスが要素に乗ったとき、フォーカスが要素に当たったとき、<br>
+						本文を入力せずに送信ボタンが押された時の３つの動きを作ります。<br>
+						<br>
+						ここでは要素の色を変えていくのですが、<br>
+						色を変えるときはjQueryの本体と、<b>jQuery Color プラグイン</b><br>
+						というものを読み込む必要があるので、htmlで読み込みます。<br>
+						<pre class="brush:html" title="mailForm.html">
+&lt;head&gt;
+	&lt;script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js">&lt;/script&gt;
+	&lt;script type="text/javascript" src="https://code.jquery.com/color/jquery.color-2.1.2.min.js">&lt;/script&gt;
+&lt;/head&gt;
+</pre>
+						<br><br><br>
+						まずは、マウスが要素に乗った時の処理を書きます。<br>
+						<pre class="brush:js" title="mailForm.html">
+&lt;body&gt;
+	<script>
+		$(function(){
+			// 入力部分
+			$('.inputbody').hover(function(){
+				$(this).stop(false, true).animate({
+					"border-color":"#FFB040"
+				}, "fast");
+			}, function(){
+				$(this).stop(false, true).animate({
+					"border-color":""
+				}, "fast");
+			});
+
+			// 送信ボタン
+			$('.submitbody').hover(function(){
+				$(this).stop(false, true).animate({
+					"backgroundColor":"#FF8080",
+					"border-color":"#FF4040"
+				}, "fast");
+			}, function(){
+				$(this).stop(false, true).animate({
+					"backgroundColor":"#A0A0FF",
+					"border-color":"#3030FF"
+				}, "fast");
+			});
+		});
+	</script>
+&lt;/body&gt;</pre>
+						hover()メソッドの第一引数にマウスが当たった時の処理、<br>
+						第二引数にマウスが離れたときの処理を書いています。<br>
+						<br>
+						stop()メソッドの第一引数をfalseにすることで溜まっているキューは破棄せず、<br>
+						第二引数をtrueにすることで<br>
+						実行中のアニメーションを最後まで飛ばすようにしています。<br>
+						<br>
+						このようにすることで、マウスが一瞬だけ要素に当たって離れた場合にも<br>
+						色がはっきりと変わるので<b>当たったということが分かりやすい</b>かなと思います。<br>
+						<br><br><br>
+						次に、要素にフォーカスが当たった時の処理を書きます。<br>
+						<pre class="brush:js" title="mailForm.html">
+&lt;body&gt;
+	<script>
+		$(function(){
+			// 入力部分
+			$('.inputbody').focusin(function(){
+				$(this).stop(false, true).css({'background-color':'#FFFFA0', 'outline':'#FFB040'});
+			}).focusout(function(){
+				$(this).stop(false, true).css({'background-color':'', 'outline':'default'});
+			});
+
+			// 送信ボタン
+			$('.submitbody').focusin(function(){
+				$(this).stop(false, true).animate({
+					"backgroundColor":"#FF8080",
+					"border-color":"#FF4040"
+				}, "fast");
+			}).focusout(function(){
+				$(this).stop(false, true).animate({
+					"backgroundColor":"#A0A0FF",
+					"border-color":"#3030FF"
+				}, "fast");
+			});
+		});
+	</script>
+&lt;/body&gt;
+</pre>
+						css()メソッドでは、入力部分の背景の色を変えています。<br>
+						複数の値を同時に変える際には<b>連想配列を渡さなければいけない</b>ので、<br>
+						引数に直接値を書く場合には{}を忘れず書くことが重要かなと思います。<br>
+						作ってるときはこれに気付かずに物凄く悩んでしまいました……<br>
+						<br><br><br>
+						最後に、本文が入力されていない場合に警告を出す処理を書きます。<br>
+						<pre class="brush:js" title="mailForm.html">
+&lt;body&gt;
+	<script>
+		$(function(){
+			// 本文が入力されているかのチェック
+			$('form').on('submit', bodyConfirm);
+
+			function bodyConfirm(){
+				if($("#textareabody").val() === ""){
+					$('#message').stop(false, true).css({'opacity': '1'}).animate({opacity: 0}, 2000);
+					return false;
+				}else{
+					return true;
+				}
+			}
+		});
+	</script>
+&lt;/body&gt;
+</pre>
+						on()メソッドでは、入力がsubmitされるときのイベントハンドラを定義しています。<br>
+						このときに呼び出した関数で<b>falseを返すとsubmitを中止できる</b>ので<br>
+						テキストエリアの.val()で中身を取得し、入力が無いならsubmitを中止しています。<br>
+						<br>
+						また、submitを中止する際はメッセージのopacity(透明度)を変更することで<br>
+						警告を一定時間表示しています。<br>
+						<br>
+						hide()とshow()を使ってもメッセージを出したり隠したりすることはできますが、<br>
+						その場合はメッセージから<b>下の要素の位置がずれてしまう</b>ので<br>
+						透明度を変更して、メッセージが見えない時でも<br>
+						処理的には<b>完全に透明なものが表示され続けている</b>ようにしました。<br>
+					</div>
+					<br><br><br>
+					<a name="tag4">
+					<div class="block">
+						<div class="titleFont">4. PHP</div>
+						<hr><br>
+						次に、POSTメソッドで送られてきた情報を<br>
+						メールで送信するPHPのプログラムを書きます。<br>
+						<pre class="brush:php" title="sendMail.php">
+&lt;html&gt;
+	&lt;body&gt;
+		&lt;?php 
+			$mail = "[名前]\n".$_POST['name']."\n\n[メールアドレス]\n".$_POST['email']."\n\n[件名]\n".$_POST['about']."\n\n[本文]\n".$_POST['main'];
+
+			if(mb_send_mail("送信したいメールアドレス", "新着メール", $mail, "From: 水飴信号メールフォーム<自分のメールアドレス>")){
+				echo "送信成功！！！";
+			}else{
+				echo "送信失敗……";
+			}
+		?&gt;
+	&lt;/body&gt;
+&lt;/html&gt;</pre>
+						送られたデータは<b>$_POST['要素のname']</b>に入っているので、<br>
+						データを出力したい順に繋ぎ合わせて変数$mailに格納し、<br>
+						mb_send_mail()関数で実際に送信しています。<br>
+						この関数の引数は、第一引数が送信先のアドレス、第二引数がメールの件名、<br>
+						第三引数がメールの本文、第四引数が送信元のアドレスです。<br>
+						<br>
+						送信元のアドレスはそのまま表示すると分かりにくかったので名前を付けています。<br>
+						<br>
+						また、mb_send_mail()でメールの送信に成功するとtrue、<br>
+						失敗するとfalseが返るので、その結果をhtmlに表示させています。<br>
+						<br>
+					</div>
+					<br><br><br>
+					<a name="tag5">
+					<div class="block">
+						<div class="titleFont">5. メールフォーム読み込み(html)</div>
+						<hr><br>
+						以上でメールフォームは完成です！<br>
+						<br>
+						ただ、このメールフォームは使いたいサーバー(FC2)<br>
+						とは別のサーバー(Xdomain)にあるので、<br>
+						FC2のhtmlからiframeを使うことで設置しています。<br>
+						<pre class="brush:html" title="about.html">
+&lt;iframe sandbox="allow-same-origin allow-forms allow-scripts" src="Xdomainのサーバー/mailForm.html"&gt;</iframe></pre>
+						<br>
+						iframeは初期状態だと色々と制限がかかっているので、<br>
+						sandbox属性に制限を外すための文字列を入れることで<br>
+						メールフォームとして正しく機能するようにしています。<br>
+						<br>
+						ここで作ったメールフォームは<br>
+						iframeを使っているhtmlファイルと同じドメインであることにして(allow-same-origin)<br>
+						iframe内でformを使うことを許可して(allow-forms)<br>
+						iframe内でスクリプトを使うことを許可しています(allow-scripts)。<br>
+						<br>
+					</div>
+					<br><br><br>
+					<a name="tag6">
+					<div class="block">
+						<div class="titleFont">6. ソースコード全体</div>
+						<hr><br>
+						今回作ったメールフォームのソースコードは<br>
+						<a href="https://github.com/mizzsig/html-tests/tree/master/mailForm">https://github.com/mizzsig/html-tests/tree/master/mailForm</a><br>
+						こちらに置いてあります。<br>
+					</div>
+				</div>
+			</div>
+	<div class="sns_manager">
+      <ul class="circle_group">
+      <span id="sns_com">Please<br>Share!</span>
+    <li id="sns_feedly"><span id="icon-feedly"></span><script>document.write("<a id=\"Afeedly\" href=\"http://cloud.feedly.com/#subscription%2Ffeed%2Fhttp%3A%2F%2Fsssignal.web.fc2.com%2Findex.html\" onclick=\"window.open(this.href, 'Fewindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-feedly">feedly</span></li>
+    <li id="sns_facebook"><span id="icon-facebook"></span><script>document.write("<a id=\"Afacebook\" href=\"http://www.facebook.com/share.php?u="+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-facebook">facebook</span></li>
+    <li id="sns_twitter"><span id="icon-twitter"></span><script>document.write("<a id=\"Atwitter\" href=\"https://twitter.com/intent/tweet?text="+encodeURIComponent(document.title)+"&url="+window.location.href+"&via=mizzsig\"></a>");</script><span id="c-twitter">twitter</span></li>
+    <li id="sns_hatebu"><span id="icon-hatebu"></span><script>document.write("<a id=\"Ahatebu\" href=\"http://b.hatena.ne.jp/entry/"+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-hatebu">hatena bookmark</span></li>
+    <li id="sns_pocket"><span id="icon-pocket"></span><script>document.write("<a id=\"Apocket\" href=\"http://getpocket.com/edit?url="+window.location.href+"&title="+encodeURIComponent(document.title)+"\" onclick=\"window.open(this.href, 'Pwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-pocket">pocket</span></li>
+    <li id="sns_googleplus"><span id="icon-google-plus"></span><script>document.write("<a id=\"Agoogleplus\" href=\"https://plus.google.com/share?url="+window.location.href+"\" onclick=\"window.open(this.href, 'Gwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-gplus">Google plus</span></li>
+</ul>
+    </div>
+	</div>
+
+	<div id="twitter">
+		<a class="twitter-timeline" href="https://twitter.com/mizzsig" data-widget-id="711181564529352705">@mizzsigさんのツイート</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- fc2HomePageAd -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7441289104125575"
+     data-ad-slot="9712419646"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      <br>
+ <a href="https://twitter.com/intent/follow?screen_name=mizzsig">
+ <img id="twitter-follow-button" src="../tButton_off.png"></a>
+	</div>
+
+  	</div>
+
+ <script async type="text/javascript" src="../followButton.js"></script>
+</body>
+</html>

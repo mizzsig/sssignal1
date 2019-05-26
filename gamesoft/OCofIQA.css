@@ -1,0 +1,21 @@
+html, body {
+    font-size: 20px;
+    text-align: center;
+}
+div.drop-zone {
+    margin: 1rem auto;
+    width: 310px;
+    height: 300px;
+    border: 1px solid #333;
+    display: inline-block;
+    text-align: center;
+}
+.image{
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+	-webkit-user-drag: none;
+	user-drag: none;
+}

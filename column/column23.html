@@ -1,0 +1,493 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>【html, css, jQuery】&lt;table&gt;の表を改造する | 水飴信号 -Starch Syrup Signal-</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../columnstyle.css">
+    <script src="shCore.js"></script>
+    <script async src="shBrushCss.js"></script>
+    <script async src="shBrushJScript.js"></script>
+    <script async src="shBrushPhp.js"></script>
+    <script async src="shBrushXml.js"></script>
+    <link type="text/css" rel="stylesheet" href="shCoreDefault.css">
+    <script>SyntaxHighlighter.all();</script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79013420-1', 'auto');
+  ga('send', 'pageview');
+	</script>
+    <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="http://sssignal.web.fc2.com/jquery-animate-css-rotate-scale.js"></script>
+	<script src="http://sssignal.web.fc2.com/snss.js"></script>
+	<link rel="stylesheet" href="http://sssignal.web.fc2.com/snss_style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.0/clipboard.min.js"></script>
+    <style type="text/css">
+		#test{
+			margin-left: 15px;
+			width: 180px;
+			height: 180px;
+			font-size: 20px;
+		}
+
+		#test2{
+			float: left;
+			font-weight: bold;
+			width: 180px;
+			margin-left: 25px;
+		}
+
+		@media screen and (max-width: 700px){
+			#test2{
+				margin-right: 100%;
+			}
+		}
+	</style>
+    <script>
+    	$(function(){
+    		// 参考にした
+    		// http://www.finefinefine.jp/jquery/kiji2167/
+    		// 列だけハイライト
+    		$('.row').mouseenter(function(){
+    			rowsHighlightOn(this, $(".row"));
+    		}).mouseleave(function(){
+    			rowsHighlightOut(this, $(".row"));
+    		});
+
+    		// 行だけハイライト
+    		$('.col').mouseenter(function(){
+    			colsHighlightOn(this);
+    		}).mouseleave(function(){
+    			colsHighlightOut(this);
+    		});
+
+    		// 列と行の両方ハイライト
+    		$('table td').mouseenter(function(){
+    			// 列
+    			$tdind = $(this).parent().find('td');
+    			rowsHighlightOn(this, $tdind);
+    			// 行
+    			colsHighlightOn(this);
+    			// 自分自身
+    			$(this).addClass("tableselecton");
+    		}).mouseleave(function(){
+    			// 列
+    			$tdind = $(this).parent().find('td');
+    			rowsHighlightOut(this, $tdind);
+    			// 行
+    			colsHighlightOut(this);
+    			// 自分自身
+    			$(this).removeClass("tableselecton");
+    		});
+
+    		// copyクラスがクリックされると、data-clipboard-textをコピー
+			var cp = new Clipboard(".copy");
+
+			// クリップボードにコピーされたことを知らせる
+    		$('.copy').on('click', function(){
+    			var notice = $('#notice_clipboard');
+    			notice.stop(true,false).animate({top:'3px'}, 500).animate({top:'3px'}, 1000).animate({top:'-65px'}, 500);
+				$('#copyValue').text($(this).attr('data-clipboard-text'));
+    		});
+    	});
+
+    	// 行にハイライトを入れる
+    	function colsHighlightOn(_this){
+    		$(_this).parent().find('*').each(function(){
+    			$(this).addClass("tableselect");
+    		});
+    	}
+
+    	// 行のハイライトを消す
+   		function colsHighlightOut(_this){
+   			$(_this).parent().find('*').each(function(){
+   				$(this).removeClass("tableselect");
+   			});
+   		}
+
+   		// 列にハイライトを入れる
+   		function rowsHighlightOn(_this, _index){
+   			$num = $(_index).index(_this);
+   			$("table tr").each(function(){
+   				$(this).find("td").eq($num).addClass("tableselect");
+   			});
+    		$("table .row").eq($num).addClass("tableselect");
+   		}
+
+   		// 列のハイライトを消す
+   		function rowsHighlightOut(_this, _index){
+   			$num = $(_index).index(_this);
+   			$("table tr").each(function(){
+   				$(this).find("td").eq($num).removeClass("tableselect");
+   			});
+   			$("table .row").eq($num).removeClass("tableselect");
+   		}
+    </script>
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@mizzsig" />
+    <meta name="twitter:title" content="【html, css, jQuery】tableタグの表を改造する | 水飴信号 - Starch Syrup Signal -" />
+    <meta name="twitter:description" content="htmlで表を使いたいときはtableタグで作ることが出来ますが、そのまま使うだけだとちょっと味気ないかなと思ったので下のような表を作ってみました。" />
+    <meta name="twitter:image" content="http://blog-imgs-102.fc2.com/s/s/s/sssignal/twittercards.png" />
+  </head>
+<body>  	
+	<div id="wrapper">
+	  <img width="100%" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/header.png">
+
+		<ul class="ulbtn">
+			<a class="btn" href="http://sssignal.web.fc2.com/">Top</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/about.html">About</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/gamesoft.html">Game & Soft</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/review.html">CD Review</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/column.html" style="background:#F0F0FF;">Column</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/link.html">Link</a>
+		</ul>
+
+		<div class="place"><a href="../column.html">Column</a> > 【html, css, jQuery】&lt;table&gt;の表を改造する </div>
+		
+		<div id="main-left">
+			<div class="boxhead">2017/2/26 【html, css, jQuery】&lt;table&gt;の表を改造する</div>
+			<div class="box">
+				<div class="columnspring">
+					<br>
+					htmlで表を使いたいときは&lt;table&gt;タグで作ることが出来ますが、<br>
+					そのまま使うだけだとちょっと味気ないかなと思ったので<br>
+					下のような表を作ってみました。<br>
+					<br>
+					<div id="notice_clipboard">クリップボードにコピーしました<div id="copyValue">value</div></div>
+					<table class="clipboard_table">
+						<thead>
+							<tr>
+								<th></th>
+								<th class="row">れつ１</th>
+								<th class="row">れつ２</th>
+								<th class="row">れつ３</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th class="col">ぎょう１</th>
+								<td class="copy" data-clipboard-text="せる１">せる１</td>
+								<td class="copy" data-clipboard-text="せる２">せる２</td>
+								<td class="copy" data-clipboard-text="せる３">せる３</td>
+							</tr>
+							<tr>
+								<th class="col">ぎょう２</th>
+								<td class="copy" data-clipboard-text="せる４">せる４</td>
+								<td class="copy" data-clipboard-text="せる５">せる５</td>
+								<td class="copy" data-clipboard-text="せる６">せる６</td>
+							</tr>
+							<tr>
+								<th class="col">ぎょう３</th>
+								<td class="copy" data-clipboard-text="せる７">せる７</td>
+								<td class="copy" data-clipboard-text="せる８">せる８</td>
+								<td class="copy" data-clipboard-text="せる９">せる９</td>
+							</tr>
+							<tr>
+								<th class="col">ぎょう４</th>
+								<td class="copy" data-clipboard-text="せる１０">せる１０</td>
+								<td class="copy" data-clipboard-text="せる１１">せる１１</td>
+								<td class="copy" data-clipboard-text="せる１２">せる１２</td>
+							</tr>
+							<tr>
+								<th class="col">ぎょう５</th>
+								<td class="copy" data-clipboard-text="せる１３">せる１３</td>
+								<td class="copy" data-clipboard-text="せる１４">せる１４</td>
+								<td class="copy" data-clipboard-text="せる１５">せる１５</td>
+							</tr>
+						</tbody>
+					</table>
+					<div>
+						<div id="test2">↓↓↓貼り付けてみて↓↓↓</div>
+						<textarea id="test" align="center"></textarea>
+					</div>
+					<br>
+					マウスが置かれた場所に対応する表の行と列に<b>ハイライト</b>が入り、<br>
+					セルを<b>クリック</b>するとその内容がクリップボードにコピーされるようになっています。<br>
+					<br>
+					作り方を以下に書いていきます。<br>
+					<br>
+					<hr>
+					<br>
+					<br>
+					<div class="toc">
+						<div class="toctitle">目次</div>
+						<ul>
+							<li><a href="#tag1">1. 表の雛型</a></li>
+							<li><a href="#tag2">2. ハイライトを入れる</a></li>
+							<ul>
+								<li><a href="#tag2">2-1. 行にハイライト</a></li>
+								<li><a href="#tag2-2">2-2. 列にハイライト</a></li>
+								<li><a href="#tag2-3">2-3. セルにハイライト</a></li>
+							</ul>
+							<li><a href="#tag3">3. クリップボードにコピー</a></li>
+							<li><a href="#tag4">4. 完成！</a></li>
+						</ul>
+					</div>
+					<br><br><br>
+					<a name="tag1">
+					<div class="block">
+						<div class="titleFont">1. 表の雛型</div>
+						<hr><br>
+						まずは表の雛型を作ります。<br>
+						<br>
+						<p data-height="280" data-theme-id="0" data-slug-hash="vxBoNL" data-default-tab="html,result" data-user="toera" data-embed-version="2" data-pen-title="vxBoNL" class="codepen">See the Pen <a href="http://codepen.io/toera/pen/vxBoNL/">vxBoNL</a> by toera (<a href="http://codepen.io/toera">@toera</a>) on <a href="http://codepen.io">CodePen</a>.</p>
+						<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+						列の部分には<b>row</b>、行の部分には<b>col</b>というクラスをつけることで<br>
+						マウスポインタの現在位置が何列の何行目にあるのかを<br>
+						後から知ることができるようにしています。<br>
+						<br>
+						表の中のセルの部分は、クリックされた時に文章をコピーできるようにしたいので、<br>
+						<b>copy</b>というクラスを付けておきます。<br>
+						また、クリックできることを分かりやすくするために<br>
+						<b>cursor: pointer;</b>というcssでマウスポインタのアイコンが変わるようにしています。<br>
+					</div>
+					<br><br><br>
+					<a name="tag2">
+					<div class="block">
+						<div class="titleFont">2. ハイライトを入れる</div>
+						<div class="titleFont">2-1. 行にハイライト</div>
+						<hr><br>
+						次はマウスが乗った時にハイライトを入れていきます。<br>
+						まずは行にマウスが乗った時に入るようにします。<br>
+						<br>
+						ハイライトの入れ方は、マウスが入った時と出て行ったときに<br>
+						専用のクラスを付けたり外したりして実装します。<br>
+						<br>
+						実装にはjQueryを使うので、まずはHTMLで読み込みます。<br>
+						<pre class="brush:html" title="HTML">
+&lt;head&gt;
+ &lt;script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;</pre>
+						<br><br><br>
+						次に行のハイライトを変えるためのJavaScriptを書いていきます。<br>
+						<pre class="brush:js" title="JavaScript">
+$(function(){
+  // 行だけハイライト
+  $('.col').mouseenter(function(){
+    colsHighlightOn(this);
+  }).mouseleave(function(){
+  	colsHighlightOut(this);
+  });
+});
+
+// 行にハイライトを入れる
+function colsHighlightOn(_this){
+  $(_this).parent().find('*').each(function(){
+    $(this).addClass("tableselect");
+  });
+}
+
+// 行のハイライトを消す
+function colsHighlightOut(_this){
+  $(_this).parent().find('*').each(function(){
+    $(this).removeClass("tableselect");
+  });
+}</pre>
+						<b>.col</b>クラス(ぎょう)にマウスが乗った時は<br>
+						マウスの乗った部分と、それに対応するセルに<b>tableselect</b>クラスを付けて<br>
+						マウスが外れた時は<b>tableselect</b>クラスを外すことでハイライトを付けています。<br>
+						<br>
+						同じ行の.colクラスとセルは親子関係が同じ位置にあるので<br>
+						<b>parent().find("*")</b>でこれらを全て選んでクラスの付け替えをしています。<br>
+						<br>
+						こちらを参考にして作りました。<br>
+						<a href="http://www.finefinefine.jp/jquery/kiji2167/">http://www.finefinefine.jp/jquery/kiji2167/</a>
+					</div>
+					<br><br><br>
+					<a name="tag2-2">
+					<div class="block">
+						<div class="titleFont">2-2. 列にハイライト</div>
+						<hr><br>
+						次は列にハイライトを入れていきます。<br>
+						<pre class="brush:js" title="JavaScript">
+$(function(){
+  // 列だけハイライト
+  $('.row').mouseenter(function(){
+    rowsHighlightOn(this, $(".row"));
+  }).mouseleave(function(){
+    rowsHighlightOut(this, $(".row"));
+  });
+});
+
+// 列にハイライトを入れる
+function rowsHighlightOn(_this, _index){
+  $num = $(_index).index(_this);
+  $("table tr").each(function(){
+    $(this).find("td").eq($num).addClass("tableselect");
+  });
+  $("table .row").eq($num).addClass("tableselect");
+}
+
+// 列のハイライトを消す
+function rowsHighlightOut(_this, _index){
+  $num = $(_index).index(_this);
+  $("table tr").each(function(){
+    $(this).find("td").eq($num).removeClass("tableselect");
+  });
+  $("table .row").eq($num).removeClass("tableselect");
+}</pre>
+						ハイライトの入れ方は、行の場合と同じく<br>
+						<b>tableselect</b>クラスの付け外しによって行っていますが、<br>
+						列の場合はハイライトを入れたいセル同士の親が違うので、<br>
+						マウスの当たった列を変数$numに入れています。<br>
+					</div>
+					<br><br><br>
+					<a name="tag2-3">
+					<div class="block">
+						<div class="titleFont">2-3. セルにハイライト</div>
+						<hr><br>
+						最後に表の中のセルにマウスを置いた場合の処理を書きます。<br>
+						これまでの節で作った関数を使いまわしています。<br>
+						<pre class="brush:js" title="JavaScript">
+$(function(){
+  // 列と行の両方ハイライト
+  $('table td').mouseenter(function(){
+    // 列
+    $tdind = $(this).parent().find('td');
+    rowsHighlightOn(this, $tdind);
+    // 行
+    colsHighlightOn(this);
+    // 自分自身
+    $(this).addClass("tableselecton");
+  }).mouseleave(function(){
+    // 列
+    $tdind = $(this).parent().find('td');
+    rowsHighlightOut(this, $tdind);
+    // 行
+    colsHighlightOut(this);
+    // 自分自身
+    $(this).removeClass("tableselecton");
+  });
+});</pre>
+						マウスの当たっているセルは他のものと色を変えたかったので<br>
+						<b>tableselecton</b>クラスを新たに用意して使っています。<br>
+					</div>
+					<br><br><br>
+					ここまでを実装した状態がこんな感じです。<br>
+					<p data-height="280" data-theme-id="0" data-slug-hash="aJoeqo" data-default-tab="js,result" data-user="toera" data-embed-version="2" data-pen-title="column23_sample2" class="codepen">See the Pen <a href="http://codepen.io/toera/pen/aJoeqo/">column23_sample2</a> by toera (<a href="http://codepen.io/toera">@toera</a>) on <a href="http://codepen.io">CodePen</a>.</p>
+					<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+					<br><br><br>
+					<a name="tag3">
+					<div class="block">
+						<div class="titleFont">3. クリップボードにコピー</div>
+						<hr><br>
+						最後にクリックしたセルをクリップボードにコピーする処理を作っていきます。<br>
+						<br>
+						この部分の処理には<a href="https://clipboardjs.com/"><b>clipboard.js</b></a>というライブラリを使ってみました。<br>
+						まずはHTMLでこのファイルを読み込みます。<br>
+						<pre class="brush:html" title="HTML">
+&lt;head&gt;
+ &lt;script src="https://cdn.jsdelivr.net/clipboard.js/1.6.0/clipboard.min.js"&gt;&lt;/script&gt;
+&lt;/head&gt;</pre>
+						<br><br><br>
+						次にクリップボードに文章がコピーされたことを知らせるための要素を作ります。<br>
+						<pre class="brush:html" title="HTML">
+&lt;body&gt;
+ &lt;div id="notice_clipboard"&gt;クリップボードにコピーしました&lt;div id="copyValue">value&lt;/div&gt;&lt;/div&gt;
+ &lt;table class="clipboard_table"&gt;
+ &lt;!-- 以下略 --&gt;
+&lt;/body&gt;</pre>
+						<pre class="brush:css" title="CSS">
+#notice_clipboard{
+	border-radius:8px;
+	-webkit-border-radius:8px;
+	-moz-border-radius:8px;
+	width: 500px;
+	height: 50px;
+	border: 3px solid #65cb00;
+	background: repeating-linear-gradient(-45deg, #ccff99, #ccff99 5px, #edffbb 0, #edffbb 10px);
+	padding-top: 5px;
+	position: fixed;
+	left: 50%;
+	/* -width / 2 を指定する (leftは要素の開始位置だから) */
+	margin-left: -250px;
+	top: -65px;
+	text-align: center;
+}
+
+#copyValue{
+	color: red;
+	font-size: 18px;
+}</pre>
+						cssで<b>position: fixed;</b>としているので<br>
+						html内のどの位置に書いても表示される場所は変わりませんが、<br>
+						わかりやすいように&lt;table&gt;の上に書きました。<br>
+						<br><br><br>
+						次にクリップボードにコピーをするためのコードを書きます。<br>
+						<pre class="brush:js" title="JavaScript">
+$(function(){
+  // copyクラスがクリックされると、data-clipboard-textをコピー
+  var cp = new Clipboard(".copy");
+
+  // クリップボードにコピーされたことを知らせる
+  $('.copy').on('click', function(){
+    var notice = $('#notice_clipboard');
+    notice.stop(true,false).animate({top:'3px'}, 500).animate({top:'3px'}, 1000).animate({top:'-65px'}, 500);
+    $('#copyValue').text($(this).attr('data-clipboard-text'));
+  });
+});</pre>
+						<pre class="brush:html" title="HTML">
+&lt;td class="copy" data-clipboard-text="せる１"&gt;せる１&lt;/td&gt;</pre>
+						こちらを参考に作りました。<br>
+						<a href="http://qiita.com/satthi/items/b4123c7683b4c3d93bf4">http://qiita.com/satthi/items/b4123c7683b4c3d93bf4</a><br>
+						<br>
+						copyクラスがクリックされると、クリックされた要素の<br>
+						<b>data-clipboard-text</b>属性の文章がクリップボードにコピーされて<br>
+						そのことを知らせる<b>#notice_clipboard</b>が上から現れるようになっています。<br>
+						#notice_clipboardには、どんな文章がコピーされたかも<br>
+						表示されるようになっています。<br>
+					</div>
+					<br><br><br>
+					完成した状態がこんな感じです。<br>
+					<br>
+					<a name="tag4">
+					<p data-height="280" data-theme-id="0" data-slug-hash="MpYZrV" data-default-tab="js,result" data-user="toera" data-embed-version="2" data-pen-title="column23_sample3" class="codepen">See the Pen <a href="http://codepen.io/toera/pen/MpYZrV/">column23_sample3</a> by toera (<a href="http://codepen.io/toera">@toera</a>) on <a href="http://codepen.io">CodePen</a>.</p>
+					<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+					<br>
+					clipboard.jsを使うことで、クリップボードにコピーする処理が<br>
+					1行で書けたので便利だなぁと思いました。<br>
+				</div>
+			</div>
+	<div class="sns_manager">
+      <ul class="circle_group">
+      <span id="sns_com">Please<br>Share!</span>
+    <li id="sns_feedly"><span id="icon-feedly"></span><script>document.write("<a id=\"Afeedly\" href=\"http://cloud.feedly.com/#subscription%2Ffeed%2Fhttp%3A%2F%2Fsssignal.web.fc2.com%2Findex.html\" onclick=\"window.open(this.href, 'Fewindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-feedly">feedly</span></li>
+    <li id="sns_facebook"><span id="icon-facebook"></span><script>document.write("<a id=\"Afacebook\" href=\"http://www.facebook.com/share.php?u="+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-facebook">facebook</span></li>
+    <li id="sns_twitter"><span id="icon-twitter"></span><script>document.write("<a id=\"Atwitter\" href=\"https://twitter.com/intent/tweet?text="+encodeURIComponent(document.title)+"&url="+window.location.href+"&via=mizzsig\"></a>");</script><span id="c-twitter">twitter</span></li>
+    <li id="sns_hatebu"><span id="icon-hatebu"></span><script>document.write("<a id=\"Ahatebu\" href=\"http://b.hatena.ne.jp/entry/"+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-hatebu">hatena bookmark</span></li>
+    <li id="sns_pocket"><span id="icon-pocket"></span><script>document.write("<a id=\"Apocket\" href=\"http://getpocket.com/edit?url="+window.location.href+"&title="+encodeURIComponent(document.title)+"\" onclick=\"window.open(this.href, 'Pwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-pocket">pocket</span></li>
+    <li id="sns_googleplus"><span id="icon-google-plus"></span><script>document.write("<a id=\"Agoogleplus\" href=\"https://plus.google.com/share?url="+window.location.href+"\" onclick=\"window.open(this.href, 'Gwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-gplus">Google plus</span></li>
+</ul>
+    </div>
+	</div>
+
+	<div id="twitter">
+		<a class="twitter-timeline" href="https://twitter.com/mizzsig" data-widget-id="711181564529352705">@mizzsigさんのツイート</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- fc2HomePageAd -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7441289104125575"
+     data-ad-slot="9712419646"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      <br>
+ <a href="https://twitter.com/intent/follow?screen_name=mizzsig">
+ <img id="twitter-follow-button" src="../tButton_off.png"></a>
+	</div>
+
+  	</div>
+
+ <script async type="text/javascript" src="../followButton.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+dl.headline{
+	font-size: 40px;
+	text-align: left;
+	margin-right:auto;
+}
+.headline dt{
+	font-size: 20px;
+	margin-left: 30px;
+}
+.headline dd{
+	font-size: 20px;
+	margin-left: 60px;
+}

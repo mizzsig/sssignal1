@@ -1,0 +1,291 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>【html, css, jQuery】回転するSNSの共有ボタンを作る | 水飴信号 -Starch Syrup Signal-</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../columnstyle.css">
+    <script src="shCore.js"></script>
+    <script async src="shBrushCss.js"></script>
+    <script async src="shBrushJScript.js"></script>
+    <script async src="shBrushXml.js"></script>
+    <link type="text/css" rel="stylesheet" href="shCoreDefault.css">
+    <script>SyntaxHighlighter.all();</script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79013420-1', 'auto');
+  ga('send', 'pageview');
+</script>
+    <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="http://sssignal.web.fc2.com/jquery-animate-css-rotate-scale.js"></script>
+<script src="http://sssignal.web.fc2.com/snss.js"></script>
+<link rel="stylesheet" href="http://sssignal.web.fc2.com/snss_style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>  	
+	<div id="wrapper">
+	  <img width="100%" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/header.png">
+
+		<ul class="ulbtn">
+			<a class="btn" href="http://sssignal.web.fc2.com/">Top</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/about.html">About</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/gamesoft.html">Game & Soft</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/review.html">CD Review</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/column.html" style="background:#F0F0FF;">Column</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/link.html">Link</a>
+		</ul>
+
+		<div class="place"><a href="../column.html">Column</a> >【html, css, jQuery】回転するSNSの共有ボタンを作る </div>
+		
+		<div id="main-left">
+			<div class="boxhead">2016/11/13 【html, css, jQuery】回転するSNSの共有ボタンを作る</div>
+			<div class="box">
+				<div class="columnspring">
+					<br>
+					最近では、SNSの共有ボタンが付いているサイトはそこら中にあると思いますが、<br>
+					このサイトにはまだついてなかったのでつけてみました。<br>
+					<br>
+					今のところ、ウィンドウの横幅が900px以下の場合は表示されないようになっているので<br>
+					スマホなどで見ている場合は見えないかもしれませんが、<br>
+					左下に６つのボタンを縦並びで表示させています。<br>
+					また、マウスポインタを当てるとボタンが回転して文字が出てくるようになってます。<br>
+					<br>
+					作り方を下にまとめておきます。<br>
+					<br>
+					<br>
+					<hr>
+					<br>
+					<br>
+					<div class="toc">
+						<div class="toctitle">目次</div>
+						<ul>
+							<li><a href="#tag1">1. JavaScriptのライブラリの読み込み(html)</a></li>
+							<li><a href="#tag2">2. SNSボタンの外観(html, css)</a></li>
+							<li><a href="#tag3">3. 動きをつける(JavaScript)</a></li>
+							<li><a href="#tag4">4. それぞれのURL(html, JavaScript)</a></li>
+							<li><a href="#tag5">5. ソースコード全体・あとがき</a></li>
+						</ul>
+					</div>
+					<br>
+					<br>
+					<a name="tag1">
+					<div class="block">
+						<div class="titleFont">1. JavaScriptのライブラリの読み込み(html)</div>
+						<hr>
+						<br>
+						<a href="column18.html">前回のtwitterフォローボタン</a>と同じように動きの部分にはjQueryを使用するのですが、<br>
+						jQueryでは要素の回転を行うことができません。<br>
+						そのため、jQueryの他に<b>jquery-animate-css-rotate-scale</b>という<br>
+						jQueryで回転や拡大を行うためのライブラリをダウンロードして使います。<br>
+						<br>
+						<b>jquery-animate-css-rotate-scale</b><br>
+						<a href="https://github.com/zachstronaut/jquery-animate-css-rotate-scale/">https://github.com/zachstronaut/jquery-animate-css-rotate-scale/</a>
+						<br>
+						<br>
+						そして、htmlの&lt;head&gt;の中で読み込ませておきます。<br>
+						<pre class="brush: html; toolbar: false" title="html">
+&lt;head&gt;
+	&lt;script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"&gt;&lt;/script&gt;
+	&lt;script type="text/javascript" src="jquery-animate-css-rotate-scale.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+</pre>
+						<br>
+						jquery-animate-css-rotate-scaleはjQueryを使用しているので、<br>
+						<b>必ずjQueryの後に読み込ませなければならない</b>ことに注意です。<br>
+					</div>
+					<br>
+					<br>
+					<br>
+					<a name="tag2">
+					<div class="block">
+						<div class="titleFont">2. SNSボタンの外観(html, css)</div>
+						<hr>
+						<br>
+						SNSボタンの外観は、こちらのサイトを参考にしました。<br>
+						<a href="http://junk-blog.com/round_sns_button/">http://junk-blog.com/round_sns_button/</a><br>
+						<br>
+						基本は上のサイトにあるものをそのまま使わせて頂いているのですが、<br>
+						<b>jquery-animate-css-rotate-scaleではclassの要素を扱うことが出来ない</b>ようなので<br>
+						各ボタンの要素はclassではなくidを使うようにしました。<br>
+						<br>
+						また、ボタンだけではなくポインタが触れたときに各SNSの名前を表示させるようにするために<br>
+						SNSの名前用のidを作成し、liの中に新しくspanをつくっておきました。<br>
+						<br>
+						実際にhtmlの&lt;body&gt;に置くと下のような感じになります。<br>
+						<pre class="brush: html; toolbar: false" title="html">
+&lt;body&gt;
+&lt;div class="sns_manager"&gt;
+	&lt;ul class="circle_group"&gt;
+		&lt;span id="sns_com"&gt;Please&lt;br&gt;Share!&lt;/span&gt;
+		&lt;li id="sns_feedly"&gt;&lt;span id="icon-feedly"&gt;&lt;/span&gt;&lt;a id="Afeedly" href="URL"&gt;&lt;span id="c-feedly"&gt;feedly&lt;/span&gt;&lt;/li&gt;
+		&lt;li id="sns_facebook"&gt;&lt;span id="icon-facebook"&gt;&lt;/span&gt;&lt;a id="Afacebook" href="URL"&gt;&lt;span id="c-facebook"&gt;facebook&lt;/span&gt;&lt;/li&gt;
+		&lt;li id="sns_twitter"&gt;&lt;span id="icon-twitter"&gt;&lt;/span&gt;&lt;a id="Atwitter" href="URL"&gt;&lt;span id="c-twitter"&gt;twitter&lt;/span&gt;&lt;/li&gt;
+		&lt;li id="sns_hatebu"&gt;&lt;span id="icon-hatebu"&gt;&lt;/span&gt;&lt;a id="Ahatebu" href="URL"&gt;&lt;span id="c-hatebu"&gt;hatena bookmark&lt;/span&gt;&lt;/li&gt;
+		&lt;li id="sns_pocket"&gt;&lt;span id="icon-pocket"&gt;&lt;/span&gt;&lt;a id="Apocket" href="URL"&gt;&lt;span id="c-pocket"&gt;pocket&lt;/span&gt;&lt;/li&gt;
+		&lt;li id="sns_googleplus"&gt;&lt;span id="icon-google-plus"&gt;&lt;/span&gt;&lt;a id="Agplus" href="URL"&gt;&lt;span id="c-gplus"&gt;Google plus&lt;/span&gt;&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+</pre>
+						<br>
+						cssは下のようになりました。<br>
+						<pre class="brush: css; toolbar: false" title="css">
+.sns_manager{
+  position:fixed;
+  left: 10px;
+  bottom: 5%;
+  text-align: left;
+}
+
+#c-feedly, #c-facebook, #c-twitter, #c-hatebu, #c-pocket, #c-gplus{
+	position: absolute;
+	display: none;
+	width:160px;
+	top: 5px;
+	left: 45px;
+	font-family: 'Itim', cursive;
+	font-size: 20px;
+	background-color:white;
+	color:black;
+	border-bottom-style: solid;
+}
+</pre>
+						ボタンは常に表示させておきたいので、<br>
+						ボタン全体を管理しているsns_managerクラスのpositionをfixedにしておきました。<br>
+						また、<b>ボタンの背景、アイコン、当たり判定はそれぞれ別のIDで管理されている</b>ので<br>
+						text-alignをleftにしてどの要素もずれが出ないようにする事が重要です。<br>
+						<br>
+						SNSの名前の部分はdisplayをnoneにすることで、<br>
+						ページを開いた直後は文字の部分が見えないようにしています。<br>
+						要素を見えなくするだけならvisibilityをhiddenにすることでもできますが、<br>
+						その場合は後述する<b>jQueryのfadeIn()関数を使ったときにも表示されなくなる</b>ので<br>
+						今回はdisplay: none;を使っています。<br>
+					</div>
+					<br>
+					<br>
+					<br>
+					<a name="tag3">
+					<div class="block">
+						<div class="titleFont">3. 動きをつける(JavaScript)</div>
+						<hr>
+						<br>
+						ボタンの動きの部分はこうなりました。<br>
+						<pre class="brush: js; toolbar: false" title="JavaScript">
+$(function(){
+	var snss = [[$('#Atwitter'), $('#icon-twitter'), $('#sns_twitter'), $('#c-twitter')]];
+	snss[0][0].hover(function(){
+		snss[0][1].stop(false,true).animate({rotate:'-=360deg',scale:'1.50'},300);
+		snss[0][2].stop(false,true).animate({scale:'1.40'},300);
+		snss[0][3].stop(false,true).fadeIn(300);
+	},function(){
+		snss[0][1].stop(false,true).animate({rotate:'+=360deg',scale:'1.0'},300);
+		snss[0][2].stop(false,true).animate({scale:'1.0'},300);
+		snss[0][3].stop(false,true).fadeOut(300);
+	});
+});
+</pre>
+						同じ処理が続くのでここにはtwitterの分だけを載せておきます。<br>
+						&lt;li&gt;(sns_twitter)の要素を拡大することで、<br>
+						その子の要素であるアイコン(icon-twitter)の部分も同時に拡大されますが<br>
+						そこからさらにアイコンを拡大しつつ回転させています。<br>
+						<br>
+						animate()関数の中でrotateを指定することで指定した角度だけ回転させることができますが、<br>
+						<b>関数が呼び出された瞬間の角度からどれだけ(今回は360°)</b>という風に回転をさせるため<br>
+						前の回転の途中で次の回転に入ると回転し終わった時の角度がずれてしまいます。<br>
+						そのため、stop()関数の第二引数をtrueにすることで、前のアニメーションが残っていたら<br>
+						それを最後まで飛ばすようにしています。<br>
+					</div>
+					<br>
+					<br>
+					<br>
+					<a name="tag4">
+					<div class="block">
+						<div class="titleFont">4. それぞれのURL(html, JavaScript)</div>
+						<hr>
+						<br>
+						各SNSのURLに飛ばす部分は下のようになりました。<br>
+						<pre class="brush: html; toolbar: false" title="html & JavaScript">
+&lt;script&gt;document.write("&lt;a id=\"Afeedly\" href=\"http://cloud.feedly.com/#subscription%2Ffeed%2Fhttp%3A%2F%2Fsssignal.web.fc2.com%2Findex.html\" onclick=\"window.open(this.href, 'Fewindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"&gt;&lt;/a&gt;");&lt;/script&gt;
+&lt;script&gt;document.write("&lt;a id=\"Afacebook\" href=\"http://www.facebook.com/share.php?u="+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"&gt;&lt;/a&gt;");&lt;/script&gt;
+&lt;script&gt;document.write("&lt;a id=\"Atwitter\" href=\"https://twitter.com/intent/tweet?text="+encodeURIComponent(document.title)+"&url="+window.location.href+"&via=mizzsig\"&gt;&lt;/a&gt;");&lt;/script&gt;
+&lt;script&gt;document.write("&lt;a id=\"Ahatebu\" href=\"http://b.hatena.ne.jp/entry/"+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"&gt;&lt;/a&gt;");&lt;/script&gt;
+&lt;script&gt;document.write("&lt;a id=\"Apocket\" href=\"http://getpocket.com/edit?url="+window.location.href+"&title="+encodeURIComponent(document.title)+"\" onclick=\"window.open(this.href, 'Pwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"&gt;&lt;/a&gt;");&lt;/script&gt;
+&lt;script&gt;document.write("&lt;a id=\"Agoogleplus\" href=\"https://plus.google.com/share?url="+window.location.href+"\" onclick=\"window.open(this.href, 'Gwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"&gt;&lt;/a&gt;");&lt;/script&gt;
+</pre>
+						共有したいページのURLやタイトルをURLのパラメータに含めて、<br>
+						新しく共有するためのウィンドウを開くようにしています。<br>
+						このサイトはfc2ホームページの無料サーバーを使っているので<br>
+						phpやfc2ブログの変数(<%topentry_link>や<%topentry_title>)は使うことが出来ないのですが、<br>
+						<b>現在のページのURLとタイトルは<br>
+						JavaScriptのwindow.location.hrefとdocument.titleで取得することが出来る</b>ので、<br>
+						JavaScriptで出力しています。<br>
+						<br>
+						また、このサイトはタイトルに|(バーティカルバー)を使っていますが、<br>
+						URLにバーティカルバーを直接含めることはできないので<br>
+						encodeURIComponent()を使うことでエンコードしています。<br>
+					</div>
+					<br>
+					<br>
+					<br>
+					<a name="#tag5">
+					<div class="block">
+						<div class="titleFont">5. ソースコード全体・あとがき</div>
+						<hr>
+						<br>
+						今回のソースコードはこちらに置いてあります。<br>
+						<a href="https://github.com/mizzsig/html-tests/tree/master/sns-share-button">https://github.com/mizzsig/html-tests/tree/master/sns-share-button</a><br>
+						<br>
+						<br>
+						今回はこれで終了です。<br>
+						<br>
+						前回でフォローボタンを右下に置いたのと、<br>
+						ウィンドウの縦幅を狭めたり、文章の邪魔になるような配置をしたくないなと思って<br>
+						共有ボタンを左下に置いたのですが、<br>
+						サイトが賑やかになったような感じで個人的には満足です。<br>
+						<br>
+						若干五月蠅い気がしないでもないですが、文章を書いている部分が<b>あまりにも地味なので</b><br>
+						これでバランスが取れていると<b>思い込む</b>ことにします！<br>
+					</div>
+				</div>
+			</div>
+	<div class="sns_manager">
+      <ul class="circle_group">
+      <span id="sns_com">Please<br>Share!</span>
+    <li id="sns_feedly"><span id="icon-feedly"></span><script>document.write("<a id=\"Afeedly\" href=\"http://cloud.feedly.com/#subscription%2Ffeed%2Fhttp%3A%2F%2Fsssignal.web.fc2.com%2Findex.html\" onclick=\"window.open(this.href, 'Fewindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-feedly">feedly</span></li>
+    <li id="sns_facebook"><span id="icon-facebook"></span><script>document.write("<a id=\"Afacebook\" href=\"http://www.facebook.com/share.php?u="+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-facebook">facebook</span></li>
+    <li id="sns_twitter"><span id="icon-twitter"></span><script>document.write("<a id=\"Atwitter\" href=\"https://twitter.com/intent/tweet?text="+encodeURIComponent(document.title)+"&url="+window.location.href+"&via=mizzsig\"></a>");</script><span id="c-twitter">twitter</span></li>
+    <li id="sns_hatebu"><span id="icon-hatebu"></span><script>document.write("<a id=\"Ahatebu\" href=\"http://b.hatena.ne.jp/entry/"+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-hatebu">hatena bookmark</span></li>
+    <li id="sns_pocket"><span id="icon-pocket"></span><script>document.write("<a id=\"Apocket\" href=\"http://getpocket.com/edit?url="+window.location.href+"&title="+encodeURIComponent(document.title)+"\" onclick=\"window.open(this.href, 'Pwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-pocket">pocket</span></li>
+    <li id="sns_googleplus"><span id="icon-google-plus"></span><script>document.write("<a id=\"Agoogleplus\" href=\"https://plus.google.com/share?url="+window.location.href+"\" onclick=\"window.open(this.href, 'Gwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-gplus">Google plus</span></li>
+</ul>
+    </div>
+	</div>
+
+	<div id="twitter">
+		<a class="twitter-timeline" href="https://twitter.com/mizzsig" data-widget-id="711181564529352705">@mizzsigさんのツイート</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- fc2HomePageAd -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7441289104125575"
+     data-ad-slot="9712419646"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      <br>
+ <a href="https://twitter.com/intent/follow?screen_name=mizzsig">
+ <img id="twitter-follow-button" src="../tButton_off.png"></a>
+	</div>
+
+  	</div>
+
+ <script async type="text/javascript" src="../followButton.js"></script>
+</body>
+</html>

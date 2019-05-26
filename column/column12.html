@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>【Visual Studio】フラットなボタンの作り方(背景透過) | 水飴信号 -Starch Syrup Signal-</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../columnstyle.css">
+    <script src="shCore.js"></script>
+    <script async src="shBrushPhp.js"></script>
+    <script async src="shBrushJScript.js"></script>
+    <link type="text/css" rel="stylesheet" href="shCoreDefault.css">
+    <script>SyntaxHighlighter.all();</script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79013420-1', 'auto');
+  ga('send', 'pageview');
+</script>
+    <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="http://sssignal.web.fc2.com/jquery-animate-css-rotate-scale.js"></script>
+<script src="http://sssignal.web.fc2.com/snss.js"></script>
+<link rel="stylesheet" href="http://sssignal.web.fc2.com/snss_style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>  	
+	<div id="wrapper">
+	  <img width="100%" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/header.png">
+
+		<ul class="ulbtn">
+			<a class="btn" href="http://sssignal.web.fc2.com/">Top</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/about.html">About</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/gamesoft.html">Game & Soft</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/review.html">CD Review</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/column.html" style="background:#F0F0FF;">Column</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/link.html">Link</a>
+		</ul>
+
+		<div class="place"><a href="../column.html">Column</a> >【Visual Studio】フラットなボタンの作り方(背景透過) </div>
+		
+		<div id="main-left">
+			<div class="boxhead">2016/9/7 【Visual Studio】フラットなボタンの作り方(背景透過)</div>
+			<div class="box">
+				<div class="columnspring">
+					<br>
+					<div class="block">
+					Visual Studioを使って、ボタンを画像に置き換えたいなと思ったのでやってみました。<br>
+					<br>
+					まずはデザイン画面を開いて、フォームの上にボタンを配置します。<br>
+					<div align="center">
+						<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/flatButton1.png">
+					</div>
+					<br>
+					今回はVisual Basicを使ってますが、Visual C++もVisual C#も特に変わりありません。<br>
+					</div>
+					<br>
+					<br>
+					<br>
+					<div class="block">
+					次はこのボタンに画像をのせてみます。<br>
+					画像はこんなものを用意しました。<br>
+					<div align="center">
+						<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/flatButtonButton.png">
+					</div>
+					画像の外側の部分は透過してあります。<br>
+					</div>
+					<br>
+					<br>
+					<br>
+					<div class="block">
+					画像をのせたらこんな感じです。<br>
+					<div align="center">
+						<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/flatButton2.png">
+					</div>
+					<br>
+					とりあえずボタンに画像は入りましたが、<br>
+					このままだとボタンの上にボタンがあるような感じで、<br>
+					見栄え的にどうなのという気がするのでもう少し手を加えます。<br>
+					</div>
+					<br>
+					<br>
+					<br>
+					<div class="block">
+					ボタンのプロパティを見ると、BackColorとFlatStyleという項目があるので<br>
+					<b>BackColorをTransparentに</b>、<b>FlatStyleをFlatに</b>変更します。<br>
+					<div align="center">
+						<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/flatButton3.png">
+					</div>
+					<br>
+					<br>
+					すると、ボタンは下のようになります。<br>
+					<div align="center">
+						<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/flatButton4.png">
+					</div>
+					今までのボタン感はやや薄れて、外側に枠があるだけという感じになりました。<br>
+					</div>
+					<br>
+					<br>
+					<br>
+					<div class="block">
+					外側の枠を消したいときには、プロパティから<br>
+					<b>FlatAppearance.BorderSize</b>を0にすることで消すことができます。<br>
+					<div align="center">
+						<img class="img100" width="300" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/flatButton5.png">
+						<img class="img100" width="300" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/flatButton6.png">
+					</div>
+					</div>
+					<br>
+					<br>
+					<br>
+					<div class="block">
+					そうすると、一見背景が透過されたボタンができたように見えますが、<br>
+					マウスカーソルがボタンの上にのると<b>背景に色がついてしまいます</b>。<br>
+					<div align="center">
+						<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/flatButton7.png">
+					</div>
+					</div>
+					<br>
+					<br>
+					<div class="block">
+					ボタンのFlatStyleをFlatにしているときは、<br>
+					ポインタがボタンの上に乗っているときの背景色を<b>FlatAppearance.MouseOverBackColor</b>で、<br>
+					ボタンを押したときの背景色を<b>FlatAppearance.MouseDownBackColor</b>で管理しているので<br>
+					それらの値をtransparentにすることで、<br>
+					ボタンの背景はポインタの影響を受けず透過されたままになります。<br>
+					<div align="center">
+						<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/flatButton8.png">
+					</div>
+					</div>
+					<br>
+				</div>
+			</div>
+	<div class="sns_manager">
+      <ul class="circle_group">
+      <span id="sns_com">Please<br>Share!</span>
+    <li id="sns_feedly"><span id="icon-feedly"></span><script>document.write("<a id=\"Afeedly\" href=\"http://cloud.feedly.com/#subscription%2Ffeed%2Fhttp%3A%2F%2Fsssignal.web.fc2.com%2Findex.html\" onclick=\"window.open(this.href, 'Fewindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-feedly">feedly</span></li>
+    <li id="sns_facebook"><span id="icon-facebook"></span><script>document.write("<a id=\"Afacebook\" href=\"http://www.facebook.com/share.php?u="+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-facebook">facebook</span></li>
+    <li id="sns_twitter"><span id="icon-twitter"></span><script>document.write("<a id=\"Atwitter\" href=\"https://twitter.com/intent/tweet?text="+encodeURIComponent(document.title)+"&url="+window.location.href+"&via=mizzsig\"></a>");</script><span id="c-twitter">twitter</span></li>
+    <li id="sns_hatebu"><span id="icon-hatebu"></span><script>document.write("<a id=\"Ahatebu\" href=\"http://b.hatena.ne.jp/entry/"+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-hatebu">hatena bookmark</span></li>
+    <li id="sns_pocket"><span id="icon-pocket"></span><script>document.write("<a id=\"Apocket\" href=\"http://getpocket.com/edit?url="+window.location.href+"&title="+encodeURIComponent(document.title)+"\" onclick=\"window.open(this.href, 'Pwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-pocket">pocket</span></li>
+    <li id="sns_googleplus"><span id="icon-google-plus"></span><script>document.write("<a id=\"Agoogleplus\" href=\"https://plus.google.com/share?url="+window.location.href+"\" onclick=\"window.open(this.href, 'Gwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-gplus">Google plus</span></li>
+</ul>
+    </div>
+	</div>
+
+	<div id="twitter">
+		<a class="twitter-timeline" href="https://twitter.com/mizzsig" data-widget-id="711181564529352705">@mizzsigさんのツイート</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- fc2HomePageAd -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7441289104125575"
+     data-ad-slot="9712419646"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      <br>
+ <a href="https://twitter.com/intent/follow?ref_src=twsrc%5Etfw&screen_name=mizzsig&tw_p=followbutton" data-show-count="false">
+ <img id="twitter-follow-button" src="../tButton_off.png"></a>
+	</div>
+
+  	</div>
+
+ <script async type="text/javascript" src="../followButton.js"></script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>【OpenCVSharp,c#】Webカメラの映像を保存する | 水飴信号 -Starch Syrup Signal-</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../columnstyle.css">
+    <script src="shCore.js"></script>
+    <script async src="shBrushCSharp.js"></script>
+    <link type="text/css" rel="stylesheet" href="shCoreDefault.css">
+    <script>SyntaxHighlighter.all();</script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79013420-1', 'auto');
+  ga('send', 'pageview');
+</script>
+    <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="http://sssignal.web.fc2.com/jquery-animate-css-rotate-scale.js"></script>
+<script src="http://sssignal.web.fc2.com/snss.js"></script>
+<link rel="stylesheet" href="http://sssignal.web.fc2.com/snss_style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>  	
+	<div id="wrapper">
+	  <img width="100%" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/header.png">
+
+		<ul class="ulbtn">
+			<a class="btn" href="http://sssignal.web.fc2.com/">Top</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/about.html">About</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/gamesoft.html">Game & Soft</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/review.html">CD Review</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/column.html" style="background:#F0F0FF;">Column</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/link.html">Link</a>
+		</ul>
+
+		<div class="place"><a href="../column.html">Column</a> >【OpenCVSharp,c#】Webカメラの映像を保存する </div>
+		
+		<div id="main-left">
+			<div class="boxhead">2016/12/26 【OpenCVSharp,c#】Webカメラの映像を保存する</div>
+			<div class="box">
+				<div class="columnspring">
+					<br>
+					半年程前に<a href="http://sssignal.web.fc2.com/column/column5.html">AndroidをWebカメラの代わりにして画像処理をする記事</a>を書いたのですが、<br>
+					この時に撮った映像を保存したいときにはどうするの？<br>
+					という質問を頂いたのでここに書いておきます。<br>
+					<br>
+					OpenCVSharpで動画ファイルを作成する方法ですが、<br>
+					OpenCVSharpの中に入っている<b>CvVideoWriter</b>というクラスを使用すれば<br>
+					<b>AVI形式の動画ファイル</b>を作成することができるみたいです。<br>
+					<br>
+					<hr>
+					<br>
+					cvVideoWriterの基本的な使い方としては、<br>
+					初期化、書き込み、終了の3つの処理を書いておけば良いようです。<br>
+					<br>
+					初期化の処理は下の通りです。<br>
+					<pre class="brush:csharp" title="初期化">
+CvVideoWriter video = new CvVideoWriter("video.avi", FourCC.MJPG, 60, new CvSize(320, 240));</pre>
+					第一引数がファイル名、第二引数が動画の圧縮の方法、<br>
+					第三引数がFPS、第四引数が動画のサイズです。<br>
+					<br>
+					第二引数の動画の圧縮方法についてはあまり詳しくはないのですが、<br>
+					使っているパソコンにどのcodecが入っているかによって<br>
+					使える圧縮方法が違ってくるのではないか？と思います。<br>
+					<br>
+					この部分に<b>FourCC.DIB</b>を指定すると圧縮せずに動画を作ることが出来ますが、<br>
+					動画の容量が凄いことになったので止めておきました。<br>
+					<br>
+					<hr style="border-top: 1px dashed;">
+					<br>
+					書き込みの処理は次のようになりました。<br>
+					<pre class="brush:csharp" title="書き込み">
+video.WriteFrame(image);</pre>
+					<br>
+					書き込みたい動画のWriteFrame()関数を呼び出してIplImage型の変数(image)を与えると<br>
+					動画の一番後ろに1フレーム書き込んでくれるみたいです。<br>
+					<br>
+					ですので、<b>この関数を何度も呼び出しながら</b>動画を作っていくことになります。<br>
+					<br>
+					<hr style="border-top: 1px dashed;">
+					<br>
+					終了の処理は下のようになりました。<br>
+					<pre class="brush:csharp" title="終了">
+video.Dispose();</pre>
+					<br>
+					<hr>
+					<br>
+					また、このクラスを使ってWebカメラの映像を保存するプログラムを作ってみました。<br>
+					<br>
+					フォームの外観は下のような感じで、pictureBoxIpl1にWebカメラの映像を映しながら<br>
+					Recボタンが押されているときにはその映像を保存するようにします。<br>
+					<br>
+					<div align="center">
+						<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/cvVideoWriter1.png">
+					</div>
+					<br>
+					プログラムは下のようになりました。<br>
+					<br>
+					<pre class="brush:csharp">
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Drawing.Drawing2D;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
+
+namespace cSharpOpenCV
+{
+    public partial class cSharpOpenCV : Form
+    {
+        BackgroundWorker worker;
+        CvVideoWriter video;
+
+        public cSharpOpenCV()
+        {
+            InitializeComponent();
+
+            worker = new BackgroundWorker();
+
+            // 非同期をキャンセルさせる
+            worker.WorkerSupportsCancellation = true;
+
+            // ProgressChangedイベントを発生させるようにする
+            worker.WorkerReportsProgress = true;
+
+            // ReportProgressメソッドで呼ばれるProgressChangedのイベントハンドラを追加
+            worker.ProgressChanged += new ProgressChangedEventHandler(worker_ProgressChanged);
+
+            // RunWorkerAsyncメソッドで呼ばれるDoWorkに、
+            // 別スレッドでUSBカメラの画像を取得し続けるイベントハンドラを追加
+            worker.DoWork += new DoWorkEventHandler(worker_DoWork);
+        }
+
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            // カメラからの映像を受け取る
+            using (var capture = Cv.CreateCameraCapture(CaptureDevice.Any))
+            {
+                IplImage frame;
+                while (true)
+                {
+                    frame = Cv.QueryFrame(capture);
+
+                    // 新しい画像を取得したので、
+                    // ReportProgressメソッドを使って、ProgressChangedイベントを発生させる
+                    worker.ReportProgress(0, frame);
+                }
+            }
+        }
+
+        private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            //  frameがe.UserStateプロパティにセットされて渡されてくる
+            IplImage image = (IplImage)e.UserState;
+
+            CvSize size = new CvSize(320, 240);
+            IplImage reImage = new IplImage(size, image.Depth, image.NChannels);
+
+            Cv.Resize(image, reImage, Interpolation.NearestNeighbor);
+
+            if (label1.Text == "Rec")
+            {
+                // 動画ファイルに書き込み
+                video.WriteFrame(reImage);
+            }
+
+            pictureBoxIpl1.ImageIpl = reImage;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            // .aviファイルを開く
+            video = new CvVideoWriter("video.avi", FourCC.MJPG, 60, new CvSize(320, 240));
+
+            // DoWorkイベントハンドラの実行を開始
+            worker.RunWorkerAsync();
+        }
+
+        private void cSharpOpenCV_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // 動画ファイルを閉じる
+            video.Dispose();
+        }
+
+        private void recButton_Click(object sender, EventArgs e)
+        {
+            label1.Text = "Rec";
+        }
+
+        private void stopButton_Click(object sender, EventArgs e)
+        {
+            label1.Text = "Stop";
+        }
+    }
+}</pre>
+					フォームを開いたときに.aviファイルを開いて、<br>
+					フォームを閉じるときに.aviファイルも閉じるようにしています。<br>
+					<br>
+					カメラの映像を映す部分は<a href="http://sssignal.web.fc2.com/column/column5.html">前回の記事</a>と同じです。<br>
+					<br>
+					<b>3行書くだけで</b>動画を作ってくれるので<br>
+					OpenCVSharpは便利だなぁーと改めて感じました。<br>
+				</div>
+			</div>
+	<div class="sns_manager">
+      <ul class="circle_group">
+      <span id="sns_com">Please<br>Share!</span>
+    <li id="sns_feedly"><span id="icon-feedly"></span><script>document.write("<a id=\"Afeedly\" href=\"http://cloud.feedly.com/#subscription%2Ffeed%2Fhttp%3A%2F%2Fsssignal.web.fc2.com%2Findex.html\" onclick=\"window.open(this.href, 'Fewindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-feedly">feedly</span></li>
+    <li id="sns_facebook"><span id="icon-facebook"></span><script>document.write("<a id=\"Afacebook\" href=\"http://www.facebook.com/share.php?u="+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-facebook">facebook</span></li>
+    <li id="sns_twitter"><span id="icon-twitter"></span><script>document.write("<a id=\"Atwitter\" href=\"https://twitter.com/intent/tweet?text="+encodeURIComponent(document.title)+"&url="+window.location.href+"&via=mizzsig\"></a>");</script><span id="c-twitter">twitter</span></li>
+    <li id="sns_hatebu"><span id="icon-hatebu"></span><script>document.write("<a id=\"Ahatebu\" href=\"http://b.hatena.ne.jp/entry/"+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-hatebu">hatena bookmark</span></li>
+    <li id="sns_pocket"><span id="icon-pocket"></span><script>document.write("<a id=\"Apocket\" href=\"http://getpocket.com/edit?url="+window.location.href+"&title="+encodeURIComponent(document.title)+"\" onclick=\"window.open(this.href, 'Pwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-pocket">pocket</span></li>
+    <li id="sns_googleplus"><span id="icon-google-plus"></span><script>document.write("<a id=\"Agoogleplus\" href=\"https://plus.google.com/share?url="+window.location.href+"\" onclick=\"window.open(this.href, 'Gwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-gplus">Google plus</span></li>
+</ul>
+    </div>
+	</div>
+
+	<div id="twitter">
+		<a class="twitter-timeline" href="https://twitter.com/mizzsig" data-widget-id="711181564529352705">@mizzsigさんのツイート</a>
+		<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- fc2HomePageAd -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7441289104125575"
+     data-ad-slot="9712419646"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      <br>
+ <a href="https://twitter.com/intent/follow?screen_name=mizzsig">
+ <img id="twitter-follow-button" src="../tButton_off.png"></a>
+	</div>
+
+  	</div>
+
+ <script async type="text/javascript" src="../followButton.js"></script>
+</body>
+</html>

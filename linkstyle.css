@@ -1,0 +1,16 @@
+.link{
+	text-align: left;
+}
+
+dt.link{
+	width: 200px;
+	float: left;
+	margin-left: 40px;
+}
+
+/* それぞれのジャンル */
+.genre{
+	text-align: left;
+	font-size: 18px;
+	font-weight: bold;
+}

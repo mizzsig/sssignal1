@@ -1,0 +1,188 @@
+.columndate{
+	text-align: left;
+	float: left;
+	width: 100px;
+	margin-left: 60px;
+}
+
+.columntitle{
+	text-align: left;
+}
+
+.columnlist{
+	margin: 8 0 8 0;
+}
+
+.columnspring{
+	text-align: left;
+}
+
+.testlist dt {
+  margin-top: 1em;
+  padding: 0 1em;
+  color: #000000;
+  background: #fcce49;
+  font-size: 1.4em;
+}
+.testlist dd {
+  padding: 10 3em;
+  margin-left: 0;
+  font-size: 1.1em;
+  border-width: 0 1px 1px;
+  border-style: none solid solid;
+  border-color: #fcce49;
+  background: #fff7c6;
+}
+
+.toc{
+	display : table;
+	padding : 7px;
+	border : 1px solid #aaa;
+	background-color : #f9f9f9;
+	font-size : 95%;
+}
+
+.toctitle{
+	text-align : center;
+	display : block;
+	font-weight : bold;
+}
+
+table{
+	border: 1px solid #a1a1a1;
+	border-collapse: collapse;
+	float: left;
+}
+
+tbody{
+	background-color: #ffffff;
+}
+
+thead th, tbody th{
+	border: 1px solid #a1a1a1;
+	width: 80px;
+	padding: 5px 15px;
+	font-size: 16px;
+	text-align: center;
+	background-color: #d1d1d1;
+}
+
+.clipboard_table tbody td{
+	text-align: center;
+	border: 1px solid #a1a1a1;
+	cursor: pointer;
+}
+
+.tableselect{
+	background-color: #ffcc99;
+}
+
+.tableselecton{
+	background-color: #ff9932;
+}
+
+#notice_clipboard{
+	border-radius:8px;
+	-webkit-border-radius:8px;
+	-moz-border-radius:8px;
+	width: 500px;
+	height: 50px;
+	border: 3px solid #65cb00;
+	background: repeating-linear-gradient(-45deg, #ccff99, #ccff99 5px, #edffbb 0, #edffbb 10px);
+	padding-top: 5px;
+	position: fixed;
+	left: 50%;
+	/* -width / 2 を指定する (leftは要素の開始位置だから) */
+	margin-left: -250px;
+	top: -65px;
+	text-align: center;
+}
+
+#copyValue{
+	color: red;
+	font-size: 18px;
+}
+
+div.toc ul{
+	list-style : none;
+	list-style-type : none;
+	list-style-image : none;
+	margin-left : 0;
+	padding-left : 1.5em;
+	text-indent : -1em;
+	display : table;
+}
+
+div.toc li{
+	display : list-item;
+	margin : 0 0 3px 0;
+}
+
+div.toc a:link {
+	text-decoration:none;
+	color:#0033cc;
+}
+
+div.toc a:visited {
+	text-decoration:none;
+	color:#0033cc;
+}
+
+div.toc a:active {
+	text-decoration:none;
+	color:#0033cc;
+}
+
+div.toc a:hover {
+	text-decoration:underline;
+}
+
+div.block {
+	border-radius:8px;
+	-webkit-border-radius:8px;
+	-moz-border-radius:8px;
+	border: 3px solid #6363f0;
+	padding: 1.00em 0.5em;
+	background-color: rgba(255, 255, 255, 0.7);
+}
+
+div.titleFont{
+	font-size: 20px;
+	font-weight: bold;
+}
+
+div.url{
+	word-break: break-all;
+}
+
+.tableStyle{
+	border-collapse: collapse;
+}
+
+.tableStyle th{
+	background-color: #cccccc;
+}
+
+.tableStyle td{
+	background-color: #ffffff;
+	text-align: center;
+}
+
+@media screen and (max-width: 640px){
+  .columndate{
+	margin-left: 0px;
+  }
+  
+  .columntitle{
+    margin-left: 100px;
+    margin-bottom: 20px;
+  }
+  
+  .img100{
+    width: 100%;
+  }
+  
+  .img50{
+    width: 48%;
+  }
+}

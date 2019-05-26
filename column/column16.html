@@ -1,0 +1,372 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>【Arduino】テープLEDと加速度センサで遊んでみる | 水飴信号 -Starch Syrup Signal-</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <link rel="stylesheet" type="text/css" href="../columnstyle.css">
+    <script src="shCore.js"></script>
+    <script async src="shBrushArduinoLite.js"></script>
+    <link type="text/css" rel="stylesheet" href="shCoreDefault.css">
+    <script>SyntaxHighlighter.all();</script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79013420-1', 'auto');
+  ga('send', 'pageview');
+</script>
+    <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="http://sssignal.web.fc2.com/jquery-animate-css-rotate-scale.js"></script>
+<script src="http://sssignal.web.fc2.com/snss.js"></script>
+<link rel="stylesheet" href="http://sssignal.web.fc2.com/snss_style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+<body>  	
+	<div id="wrapper">
+	  <img width="100%" src="http://blog-imgs-83.fc2.com/s/s/s/sssignal/header.png">
+
+		<ul class="ulbtn">
+			<a class="btn" href="http://sssignal.web.fc2.com/">Top</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/about.html">About</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/gamesoft.html">Game & Soft</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/review.html">CD Review</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/column.html" style="background:#F0F0FF;">Column</a>
+			<a class="btn" href="http://sssignal.web.fc2.com/link.html">Link</a>
+		</ul>
+
+		<div class="place"><a href="../column.html">Column</a> >【Arduino】テープLEDと加速度センサで遊んでみる </div>
+		
+		<div id="main-left">
+			<div class="boxhead">2016/10/7 【Arduino】テープLEDと加速度センサで遊んでみる</div>
+			<div class="box">
+				<div class="columnspring">
+					<br>
+					この前、テープLEDというものを手に入れたので、テープLEDと加速度センサ、Arduino Unoを使って<br>
+					下のようなプログラムを作ってみました。<br>
+                  	<br>
+					<iframe class="img100" width="560" height="315" src="https://www.youtube.com/embed/Sax-8eY1ofA" frameborder="0" allowfullscreen></iframe>
+                  	<br>
+                  	<br>
+					左手に持っているカプセルの中に加速度センサを入れておいて、<br>
+					それを転がすことで光の位置が移動するようになっています。<br>
+					また、普段は赤色の光を出していますがセンサがひっくり返ると<br>
+					青い光を出すようにしてみました。<br>
+					<br>
+					作り方を以下に書いていきます。<br>
+					<br>
+					<hr>
+					<br>
+					<br>
+					<div class="toc">
+						<div class="toctitle">目次</div>
+						<ul>
+							<li><a href="#tag1">1. 使用したLEDテープとセンサ</a></li>
+							<li><a href="#tag2">2. 回路の接続</a></li>
+							<li><a href="#tag3">3. ライブラリの導入</a></li>
+							<li><a href="#tag4">4. プログラム</a></li>
+							<ul>
+								<li><a href="#tag4-1">4-1. センサ入力</a></li>
+								<li><a href="#tag4-2">4-2. LEDテープ出力</a></li>
+								<li><a href="#tag4-3">4-3. ソースコード</a></li>
+							</ul>
+						</ul>
+					</div>
+					<br>
+					<br>
+					<a name="tag1">
+					<div class="block">
+						<div class="titleFont">1. 使用したLEDテープとセンサ</div>
+						<hr>
+						<br>
+						今回使ったLEDテープは、<a href="https://www.switch-science.com/catalog/1399/">SSCI-013994</a>というものです。<br>
+						<br>
+						長さは１mで、５v電源、GND、DO/DIの３つを繋げば操作することができます。<br>
+						<a href="https://github.com/adafruit/Adafruit_NeoPixel">Arduino用のライブラリ</a>もあるので、特に難しいことを考えなくても動かせました。<br>
+						<br>
+						<br>
+						<br>
+						加速度センサは、<a href="https://strawberry-linux.com/catalog/items?code=12101">MMA7361LC</a>というものを使いました。<br>
+						<br>
+						X,Y,Zの３軸を測ることが可能で、<br>
+						計測する範囲は±1.5Gまでと±6Gまでの２種類のモードを使うことができます。<br>
+						<br>
+						アナログ出力のセンサなので、電圧から重力加速度(G)への変換は<br>
+						Arduino側のプログラムで行わないといけませんが、<br>
+						やり方さえわかれば特に問題なくできると思います。<br>
+						<br>
+						他には5vで動くテープLEDと違い、2.2v～3.6vまでの範囲でしか動作しないことと、<br>
+						デフォルトではスリープモードになっているので、<br>
+						それを解除しないと動作しないということに注意すれば大丈夫かなという感じです。<br>
+					</div>
+					<br>
+					<br>
+					<br>
+					<a name="tag2">
+					<div class="block">
+						<div class="titleFont">2. 回路の接続</div>
+						<hr>
+						<br>
+						次は、LEDテープ、加速度センサ、Arduino Unoの３つを繋げます。<br>
+						LEDテープの端には元からはんだが乗っていたので、そこに導線を繋いでいきます。<br>
+						<img height="300" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/teapLED1.jpg">
+						<br>
+						<br>
+						<br>
+						加速度センサは、X軸、Y軸、Z軸、GND、電源の５つの線を繋げます。<br>
+						コネクタを基板にはんだ付けして、そこにセンサを挿しました。<br>
+						<img height="300" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/teapLED2.jpg">
+						<br>
+						このセンサは他にも落下を検出するピンと<br>
+						計測する値の範囲を切り替えるピンがありますが、<br>
+						今回は傾けて使うので、重力加速度は大体±1G以内に収まるだろうということで<br>
+						落下検出のピンと1.5G/6G切り替えのピンは使わないことにしました。<br>
+						<br>
+						また、このセンサにはスリープピンというものがついていて、<br>
+						このピンに入力がない場合はセンサが動作しないようになっているのですが、<br>
+						この機能も特に使い道はないかなと思ったので、<br>
+						はんだ付けの部分で電源と一まとめにしました。<br>
+						<img height="300" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/teapLED3.jpg">
+						<br>
+						センサは操作しやすいように、ガチャガチャなんかで使われているカプセルの中に入れました。<br>
+						ちょうどいい感じで穴が開いていたので、そこに導線を通します。<br>
+						<img height="300" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/teapLED4.jpg">
+						<br>
+						中でセンサがずれるのを抑えるためにティッシュを詰めてあります。<br>
+						<br>
+						<br>
+						LEDテープやセンサに繋いだ導線の先端部分にはArduinoに挿すためのオスピンを<br>
+						つける必要がありますが、圧着工具を持ってないので<br>
+						はんだでくっつけた後にセロテープを巻いて絶縁しました。<br>
+						<img height="300" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/teapLED5.jpg">
+						<br>
+						ちょっと無理やり感が漂ってる気がしないでもないですが、<br>
+						一個人が趣味で作ってるものなので<br>
+						<b>動けばいいんだよ動けばぁ！</b>という精神でやっていきます。<br>
+						<br>
+						<br>
+						最後に導線をArduinoに挿していきます。<br>
+						部品側とArduino側の対応は以下の通りです。<br>
+						<br>
+						<table class="tableStyle" border="1" width="400px">
+							<tr><th>部品側</th><th>Arduino側</th></tr>
+							<tr><td>LEDテープ5V</td><td>5V</td></tr>
+							<tr><td>LEDテープDO/DI</td><td>6番ピン</td></tr>
+							<tr><td>LEDテープGND</td><td>GND</td></tr>
+							<tr><td>加速度センサ電源</td><td>3.3V</td></tr>
+							<tr><td>加速度センサX軸</td><td>A0</td></tr>
+							<tr><td>加速度センサY軸</td><td>A1</td></tr>
+							<tr><td>加速度センサZ軸</td><td>A2</td></tr>
+							<tr><td>加速度センサGND</td><td>GND</td></tr>
+						</table>
+						<br>
+						<br>
+						<img height="300" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/teapLED6.jpg">
+						<br>
+						そんな感じでハード部分は終了です！<br>
+					</div>
+					<br>
+					<br>
+					<a name="tag3">
+					<div class="block">
+						<div class="titleFont">3. ライブラリの導入</div>
+						<hr>
+						<br>
+						次はプログラムを組んでいきますが、その前にテープLEDのArduino用ライブラリを導入します。<br>
+						<br>
+						まずはGitHubのページに入り、zipファイルをダウンロードします。<br>
+						ダウンロードしたファイルのファイル名は<b>Adafruit_NeoPixel.zip</b>という名前に変更しておきます。<br>
+						<br>
+						<img class="img100" height="300" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/teapLED7.png">
+						<br>
+						<br>
+						次にArduinoのIDEを開いて、<b>スケッチ>Include Library>Add .ZIP Library</b> と進んで<br>
+						先程ダウンロードした.zipファイルを選択すればライブラリを入れることができます。<br>
+						<br>
+						<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/teapLED8.png">
+					</div>
+					<br>
+					<br>
+					<a name="tag4">
+					<a name="tag4-1">
+					<div class="block">
+						<div class="titleFont">4. プログラム</div>
+						<div class="titleFont">4-1. センサ入力</div>
+						<hr>
+						<br>
+						ここからは実際にプログラムを書きます。<br>
+						<br>
+						プログラムは大きく分けてセンサの入力部分と<br>
+						LEDテープの出力部分の２つなのですが、<br>
+						センサの入力部分のプログラムは下のような感じです。<br>
+						<pre class="brush: arduinolite;">
+int gravity[3] = { 0 }; // 0:x軸, 1:y軸, 2:z軸
+const int analog_pin[3] = {A0, A1, A2};
+
+void setup() {
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
+  pinMode(A2, INPUT);
+}
+
+void loop() {
+  readSensor();
+}
+
+void readSensor(){
+  for(int i = 0; i < 3; i++){
+    gravity[i] = analogRead(analog_pin[i]);
+    // LEDが60個なので0～59の範囲にする
+    gravity[i] = map(gravity[i], 150, 525, 0, 59);
+  }
+}
+</pre>
+						アナログピンからの入力をgravityという配列に入れています。<br>
+						analogRead()関数を使うと、0～5Vの電圧を0～1023の値に変換しますが、<br>
+						加速度センサの電源電圧は3.3Vを使っているので、<br>
+						加速度センサで1.5Gを検出した際は、3.3Vの電圧がかかって<br>
+						1023×3.3÷5 ≒ 675となります。<br>
+						<br>
+						そのため、この加速度センサをどう扱ってもanalogReadで読み取る値の範囲は<br>
+						0 ～ 675くらいだと考えられますが、傾けて使うだけなら1Gを超えることは<br>
+						ほとんどないだろうと思ったので、両端の値の範囲を狭めて<br>
+						150 ～ 525という風にしてあります。<br>
+						<br>
+						そして、使うLEDテープは60個あるので、150 ～ 525までの値を<br>
+						0 ～ 59までの値に割り振ることによりセンサの傾きで<br>
+						それぞれのLEDをえらべるようにします。<br>
+					</div>
+					<br>
+					<br>
+					<a name="tag4-2">
+					<div class="block">
+						<div class="titleFont">4-2. LEDテープ出力</div>
+						<hr>
+						<br>
+						次にLEDテープの出力を行う部分のプログラムを書きます。<br>
+						先程ダウンロードしたライブラリに入っていたstrandtestの中身を<br>
+						色々と使いまわして作りました。<br>
+						<br>
+						<img class="img100" src="http://blog-imgs-91.fc2.com/s/s/s/sssignal/teapLED9.png">
+						<br>
+						<br>
+						<pre class="brush: arduinolite;">
+#include < Adafruit_NeoPixel.h >
+#ifdef __AVR__
+  #include < avr/power.h >
+#endif
+
+#define PIN 6
+#define NUMPIXELS 60
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+void setup() {
+  // This is for Trinket 5V 16MHz, you can remove these three lines if you are not using a Trinket
+  #if defined (__AVR_ATtiny85__)
+    if (F_CPU == 16000000) clock_prescale_set(clock_div_1);
+  #endif
+  // End of trinket special code
+
+  strip.begin();
+  strip.show(); // Initialize all pixels to 'off'
+}
+
+void loop() {
+  for(int i = 0; i < NUMPIXELS; i++){
+    strip.setPixelColor(i, strip.Color(0, 0, 0));
+  }
+  for(int i = 0; i < 5; i++){
+    if(gravity[2] > 30){
+      strip.setPixelColor(gravity[0] + i - 2, Wheel((i*10) & 255));
+    }else{
+      strip.setPixelColor(gravity[0] + i - 2, Wheel(((i*10)+128) & 255));
+    }
+  }
+  strip.show();
+}
+
+// Input a value 0 to 255 to get a color value.
+// The colours are a transition r - g - b - back to r.
+uint32_t Wheel(byte WheelPos) {
+  WheelPos = 255 - WheelPos;
+  if(WheelPos < 85) {
+    return strip.Color((255 - WheelPos * 3) / 3, 0, WheelPos);
+  }
+  if(WheelPos < 170) {
+    WheelPos -= 85;
+    return strip.Color(0, WheelPos, (255 - WheelPos * 3) / 3);
+  }
+  WheelPos -= 170;
+  return strip.Color(WheelPos, (255 - WheelPos * 3) / 3, 0);
+}
+</pre>
+						センサの入力で得たLEDの位置を中心として５個のLEDを光らせています。<br>
+						strip.setPixelColor()関数に光らせたいLEDの位置と光の色を引数として与えていき<br>
+						strip.show()を呼ぶことで実際にLEDが光ります。<br>
+						Wheel()関数には、0～255の値を与えると赤～緑～青の色を返すようになっています。<br>
+						値が255を超えてはいけないので、255とのAND演算を行うことで<br>
+						値が確実に255以下になるようにしています。<br>
+					</div>
+					<br>
+					<br>
+					<a name="tag4-3">
+					<div class="block">
+						<div class="titleFont">4-3. ソースコード</div>
+						<hr>
+						<br>
+						上の２つのプログラムを合わせた全体のソースコードはこちらです。<br>
+						<a href="https://github.com/mizzsig/Arduino-tests/blob/master/teapLEDtest.ino">https://github.com/mizzsig/Arduino-tests/blob/master/teapLEDtest.ino</a>
+					</div>
+					<br>
+					<hr>
+					<br>
+					<div class="block">
+						<div class="titleFont">追記</div>
+						<hr>
+						<br>
+						テープLEDの光をLeapmotionでも操作できるようにしてみました。<br>
+						<a href="http://sssignal.web.fc2.com/column/column17.html">http://sssignal.web.fc2.com/column/column17.html</a><br>
+						こちらも合わせてどうぞ！<br>
+					</div>
+				</div>
+			</div>
+	<div class="sns_manager">
+      <ul class="circle_group">
+      <span id="sns_com">Please<br>Share!</span>
+    <li id="sns_feedly"><span id="icon-feedly"></span><script>document.write("<a id=\"Afeedly\" href=\"http://cloud.feedly.com/#subscription%2Ffeed%2Fhttp%3A%2F%2Fsssignal.web.fc2.com%2Findex.html\" onclick=\"window.open(this.href, 'Fewindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-feedly">feedly</span></li>
+    <li id="sns_facebook"><span id="icon-facebook"></span><script>document.write("<a id=\"Afacebook\" href=\"http://www.facebook.com/share.php?u="+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-facebook">facebook</span></li>
+    <li id="sns_twitter"><span id="icon-twitter"></span><script>document.write("<a id=\"Atwitter\" href=\"https://twitter.com/intent/tweet?text="+encodeURIComponent(document.title)+"&url="+window.location.href+"&via=mizzsig\"></a>");</script><span id="c-twitter">twitter</span></li>
+    <li id="sns_hatebu"><span id="icon-hatebu"></span><script>document.write("<a id=\"Ahatebu\" href=\"http://b.hatena.ne.jp/entry/"+window.location.href+"\" onclick=\"window.open(this.href, 'FBwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-hatebu">hatena bookmark</span></li>
+    <li id="sns_pocket"><span id="icon-pocket"></span><script>document.write("<a id=\"Apocket\" href=\"http://getpocket.com/edit?url="+window.location.href+"&title="+encodeURIComponent(document.title)+"\" onclick=\"window.open(this.href, 'Pwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-pocket">pocket</span></li>
+    <li id="sns_googleplus"><span id="icon-google-plus"></span><script>document.write("<a id=\"Agoogleplus\" href=\"https://plus.google.com/share?url="+window.location.href+"\" onclick=\"window.open(this.href, 'Gwindow', 'width=650, height=450, menubar=no, toolbar=no, scrollbars=yes'); return false;\"></a>");</script><span id="c-gplus">Google plus</span></li>
+</ul>
+    </div>
+	</div>
+
+	<div id="twitter">
+			<a class="twitter-timeline" href="https://twitter.com/mizzsig" data-widget-id="711181564529352705">@mizzsigさんのツイート</a>
+			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+          <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- fc2HomePageAd -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7441289104125575"
+     data-ad-slot="9712419646"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+      <br>
+ <a href="https://twitter.com/intent/follow?ref_src=twsrc%5Etfw&screen_name=mizzsig&tw_p=followbutton" data-show-count="false">
+ <img id="twitter-follow-button" src="../tButton_off.png"></a>
+	</div>
+
+  	</div>
+
+ <script async type="text/javascript" src="../followButton.js"></script>
+</body>
+</html>

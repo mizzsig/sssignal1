@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Script-type" content="text/javascript">
+    <meta http-equiv="Content-Style-type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/cupertino/jquery-ui.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="ui.js" ></script>
+    <script type="text/javascript" src="audio.js" ></script>
+    <style>
+canvas {
+  display:block;
+  border:1px solid black;
+}
+
+input{
+	width: 50px;
+	border: 0px;
+	text-align: center;
+}
+
+.floatLeft{
+	float: left;
+}
+
+.explainText{
+	font-size: 18px;
+}
+
+.hzText{
+	font-size: 12px;
+}
+
+.gEQ{
+	margin-left: 17px;
+}
+
+.gEQWrapper{
+	text-align: center;
+}
+
+.image{
+	display: block;
+	margin: 0px auto;
+}
+
+#num{
+	width: 40px;
+}
+
+#volume{
+	width: 150px;
+	margin-left: 20px;
+	border: 1px solid #aaa;
+	padding: 10px;
+}
+
+#graphicEQ{
+	width: 300px;
+	margin-left: 20px;
+	border: 1px solid #aaa;
+	padding: 10px;
+}
+
+#distortion{
+	width: 160px;
+	margin-left: 20px;
+	border: 1px solid #aaa;
+	padding: 10px;
+}
+
+#delay{
+	width: 230px;
+	margin-left: 20px;
+	border: 1px solid #aaa;
+	padding: 10px;
+}
+
+#wrapper{
+	margin-left: 20%;
+}
+    </style>
+    <title>えふぇくたー(仮)</title>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-79013420-1', 'auto');
+  ga('send', 'pageview');
+</script>
+  </head>
+  <body>
+  	<div id="wrapper">
+  		<div>
+		  	<video id="video" class="floatLeft" width="260" height="200" autoplay="1"></video>
+		  	<div id="volume" class="floatLeft">
+			  	<span class="explainText">Volume : </span><input id="volNum" class="explainText" type="text" readonly />
+			  	<div id="volumeSlider"></div>
+		  	</div>
+		  	<div id="graphicEQ" class="floatLeft">
+		  		<img id="gEQImg" class="image" src="equalizer1.png">
+		  		<div class="gEQWrapper floatLeft">
+			  		<input id="gEQ1Num" class="explainText" type="text" readonly />
+			  		<div id="gEQ1Slider" class="gEQ"></div>
+			  		<span class="hzText">31.25Hz</span>
+		  		</div>
+		  		<div class="gEQWrapper floatLeft">
+			  		<input id="gEQ2Num" class="explainText" type="text" readonly />
+			  		<div id="gEQ2Slider" class="gEQ"></div>
+			  		<span class="hzText">62.5Hz</span>
+		  		</div>
+		  		<div class="gEQWrapper floatLeft">
+			  		<input id="gEQ3Num" class="explainText" type="text" readonly />
+			  		<div id="gEQ3Slider" class="gEQ"></div>
+			  		<span class="hzText">125Hz</span>
+		  		</div>
+		  		<div class="gEQWrapper floatLeft">
+			  		<input id="gEQ4Num" class="explainText" type="text" readonly />
+			  		<div id="gEQ4Slider" class="gEQ"></div>
+			  		<span class="hzText">250Hz</span>
+			  	</div>
+			  	<div class="gEQWrapper floatLeft" style="margin-right: 10%;">
+			  		<input id="gEQ5Num" class="explainText" type="text" readonly />
+			  		<div id="gEQ5Slider" class="gEQ"></div>
+			  		<span class="hzText">500Hz</span>
+			  	</div>
+			  	<div class="gEQWrapper floatLeft">
+			  		<input id="gEQ6Num" class="explainText" type="text" readonly />
+			  		<div id="gEQ6Slider" class="gEQ"></div>
+			  		<span class="hzText">1kHz</span>
+			  	</div>
+			  	<div class="gEQWrapper floatLeft">
+			  		<input id="gEQ7Num" class="explainText" type="text" readonly />
+			  		<div id="gEQ7Slider" class="gEQ"></div>
+			  		<span class="hzText">2kHz</span>
+			  	</div>
+			  	<div class="gEQWrapper floatLeft">
+			  		<input id="gEQ8Num" class="explainText" type="text" readonly />
+			  		<div id="gEQ8Slider" class="gEQ"></div>
+			  		<span class="hzText">4kHz</span>
+			  	</div>
+			  	<div class="gEQWrapper floatLeft">
+			  		<input id="gEQ9Num" class="explainText" type="text" readonly />
+			  		<div id="gEQ9Slider" class="gEQ"></div>
+			  		<span class="hzText">8kHz</span>
+			  	</div>
+			  	<div class="gEQWrapper floatLeft">
+			  		<input id="gEQ10Num" class="explainText" type="text" readonly /><br>
+			  		<div id="gEQ10Slider" class="gEQ"></div>
+			  		<span class="hzText">16kHz</span>
+			  	</div>
+		  	</div>
+		    <div id="distortion" class="floatLeft">
+		  		<img id="disImg" class="image" src="distortion1.png">
+		    	<span class="explainText">Distortion : </span><input id="disNum" class="explainText" type="text" readonly />
+			  	<div id="distortionSlider"></div>
+		    </div>
+		    <div id="delay" class="floatLeft">
+		  		<img id="delImg" class="image" src="delay1.png">
+		    	<span class="explainText">Delay - time : </span><input id="delTimeNum" class="explainText" type="text" readonly />
+		    	<div id="delayTimeSlider"></div>
+		    	<span class="explainText">Delay - dry : </span><input id="delDryNum" class="explainText" type="text" readonly />
+		    	<div id="delayDrySlider"></div>
+		    	<span class="explainText">Delay - wet : </span><input id="delWetNum" class="explainText" type="text" readonly />
+		    	<div id="delayWetSlider"></div>
+		    	<span class="explainText">Delay - feedback : </span><input id="delFeedNum" class="explainText" type="text" readonly />
+		    	<div id="delayFeedbackSlider"></div>
+		    </div>
+	  	</div>
+	    <audio id="audio" autoplay="1"></audio>
+	    <canvas id="frequency"></canvas>
+	    <canvas id="timedomain"></canvas>
+    </div>
+    <br>
+    <div align="center">つくったひと : <a href="https://twitter.com/mizzsig">@mizzsig</a><br>
+    ホームページ : <a href="http://sssignal.web.fc2.com/">http://sssignal.web.fc2.com/</a><br>
+    <br>
+    参考URL<br>
+    <a href="http://www.kanasansoft.com/Kanasansoft/getusermedia_and_analyser/index.html">http://www.kanasansoft.com/Kanasansoft/getusermedia_and_analyser/index.html</a><br>
+    <a href="http://curtaincall.weblike.jp/portfolio-web-sounder/webaudioapi-effectors/demos/demo-21">http://curtaincall.weblike.jp/portfolio-web-sounder/webaudioapi-effectors/demos/demo-21</a><br>
+    <a href="http://blog.digital-bot.com/blog/2013/12/11/web-audio/">http://blog.digital-bot.com/blog/2013/12/11/web-audio/</a><br></div>
+  </body>
+</html>
